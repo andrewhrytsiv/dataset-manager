@@ -8,8 +8,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import com.dao.UrlDataDAO;
 import com.dao.UserDAO;
-import com.dao.impl.UrlDataDAOImpl;
-import com.dao.impl.UserDAOImpl;
+import com.dao.sql.UrlDataDAOSql;
+import com.dao.sql.UserDAOSql;
 
 @Configuration
 public class SpringDatabaseConfig {
@@ -31,13 +31,13 @@ public class SpringDatabaseConfig {
 	
 	@Bean
 	public UserDAO userDAO(){
-		UserDAO userDAO = new UserDAOImpl();
+		UserDAO userDAO = new UserDAOSql();
 		return userDAO;
 	}
 	
 	@Bean
 	public UrlDataDAO usrlDataDAO(){
-		UrlDataDAO urlDataDAO = new UrlDataDAOImpl();
+		UrlDataDAO urlDataDAO = new UrlDataDAOSql();
 		return urlDataDAO;
 	}
 }
