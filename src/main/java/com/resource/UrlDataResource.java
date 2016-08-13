@@ -18,6 +18,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.UrlDataService;
 import static com.util.HTTPHelper.*;
+
+import com.util.JsonTransformer;
 import com.util.Utility;
 
 
@@ -34,10 +36,13 @@ public class UrlDataResource {
 	
 	private void setupEndpoints() {
 		
+		get(Bootstrap.API_CONTEXT + "/url_data", "application/json", (request, response) -> urlDataService.findAll(), new JsonTransformer());
+		
 		post(Bootstrap.API_CONTEXT + "/url_data", "application/json", (request, response) -> {
 			JsonObject  userObject = new JsonParser().parse(request.body()).getAsJsonObject();
 			String url = userObject.get(URL).getAsString();
 			UrlData newDataUrl = new UrlData(url);
+			newDataUrl.setType("csv");
 			if (urlDataService.insertUrlData(newDataUrl)) {
 				response.status(OK_STATUS);
 				return "some data";

@@ -9,6 +9,8 @@ public class UrlData {
 	private String type;
 	private File file;
 	
+	public UrlData(){}
+	
 	public UrlData(String url){
 		this.url = url;
 	}

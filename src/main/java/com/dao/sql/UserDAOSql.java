@@ -1,4 +1,4 @@
-package com.dao.impl;
+package com.dao.sql;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import com.dao.UserDAO;
 import com.entity.User;
 
 @Repository 
-public class UserDAOImpl implements UserDAO{
+public class UserDAOSql implements UserDAO{
 	
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
