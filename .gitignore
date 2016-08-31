@@ -1,0 +1,5 @@
+/target/
+/deploy/
+/server_logs.log
+/.classpath
+/.project
