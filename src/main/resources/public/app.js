@@ -2,7 +2,8 @@ var app = angular.module('client_app', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ngRoute'
+    'ngRoute',
+    'ngStorage'
 ]);
 
 app.config(function ($routeProvider) {
