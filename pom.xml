@@ -7,7 +7,10 @@
   <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <jdk.version>1.8</jdk.version>
         <spring.version>4.3.0.RELEASE</spring.version>
+        <resources.dir>${project.basedir}/src/main/resources</resources.dir>
+        <server.dir>${project.build.directory}/server</server.dir>
   </properties>
   
   <dependencies>
@@ -63,5 +66,80 @@
         <version>${spring.version}</version>
     </dependency>
   </dependencies>
-    
+  <build>
+		<finalName>app-server</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			
+			<!-- Make jar executable -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+				  <excludes>
+					<exclude>**/log4j.properties</exclude>
+					<exclude>**/address.properties</exclude>
+				  </excludes>
+				  <archive>
+					<manifest>
+						<addClasspath>true</addClasspath>
+						<!-- Jar file entry point -->
+						<mainClass>com.bootstrap.Bootstrap</mainClass>
+						<classpathPrefix>./lib</classpathPrefix>
+					</manifest>
+					<manifestEntries>
+                		<Class-Path>./config/</Class-Path>
+            		</manifestEntries>
+				  </archive>
+				  <outputDirectory>${server.dir}</outputDirectory>
+				</configuration>
+			</plugin>
+			<!-- Copy project dependency -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+				  <execution>
+					<id>copy-dependencies</id>
+					<phase>package</phase>
+					<goals>
+						<goal>copy-dependencies</goal>
+					</goals>
+					<configuration>
+					  <includeScope>runtime</includeScope>
+					  <outputDirectory>${server.dir}/lib/</outputDirectory>
+					</configuration>
+				  </execution>
+				</executions>
+			</plugin>
+		</plugins>
+		 <resources>
+        <resource>
+           <directory>${resources.dir}</directory>
+     	   <targetPath>${server.dir}/config</targetPath>
+      		<includes>
+        		<include>address.properties</include>
+        		<include>log4j.properties</include>
+      		</includes>
+        </resource>
+    </resources>
+	</build>  
 </project>
