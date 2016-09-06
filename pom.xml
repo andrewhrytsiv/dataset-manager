@@ -66,6 +66,7 @@
         <version>${spring.version}</version>
     </dependency>
   </dependencies>
+  <!-- 
   <build>
 		<finalName>app-server</finalName>
 		<plugins>
@@ -87,8 +88,6 @@
 					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
-			
-			<!-- Make jar executable -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -100,7 +99,6 @@
 				  <archive>
 					<manifest>
 						<addClasspath>true</addClasspath>
-						<!-- Jar file entry point -->
 						<mainClass>com.bootstrap.Bootstrap</mainClass>
 						<classpathPrefix>./lib</classpathPrefix>
 					</manifest>
@@ -111,7 +109,6 @@
 				  <outputDirectory>${server.dir}</outputDirectory>
 				</configuration>
 			</plugin>
-			<!-- Copy project dependency -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -141,5 +138,6 @@
       		</includes>
         </resource>
     </resources>
-	</build>  
+	</build>
+	 -->  
 </project>
