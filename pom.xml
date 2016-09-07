@@ -66,7 +66,7 @@
         <version>${spring.version}</version>
     </dependency>
   </dependencies>
-  <!-- 
+  
   <build>
 		<finalName>app-server</finalName>
 		<plugins>
@@ -128,16 +128,23 @@
 				</executions>
 			</plugin>
 		</plugins>
-		 <resources>
-        <resource>
-           <directory>${resources.dir}</directory>
-     	   <targetPath>${server.dir}/config</targetPath>
-      		<includes>
-        		<include>address.properties</include>
-        		<include>log4j.properties</include>
-      		</includes>
-        </resource>
-    </resources>
+		<resources>
+        	<resource>
+           		<directory>${resources.dir}</directory>
+     	   		<targetPath>${server.dir}/config</targetPath>
+      			<includes>
+        			<include>address.properties</include>
+        			<include>log4j.properties</include>
+      			</includes>
+        	</resource>
+        	<resource>
+        		<directory>${resources.dir}/public</directory>
+     	   		<targetPath>${server.dir}/public</targetPath>
+     	   		<excludes>
+     	   			<exclude>.idea/**</exclude>
+     	   		</excludes>
+        	</resource>
+    	</resources>
 	</build>
-	 -->  
+	
 </project>

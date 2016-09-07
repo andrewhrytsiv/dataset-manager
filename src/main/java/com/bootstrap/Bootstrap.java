@@ -12,13 +12,16 @@ import com.service.UrlDataService;
 
 public class Bootstrap {
 	
-	private static final int PORT = 8080;
+	private static final int PORT = 8090;
 	public static final String API_CONTEXT = "/api";
  
     public static void main(String[] args) {
 //    	 Spark.setSecure("deploy/private/localhost.jks", "andrew", null, null); //https set up
          port(PORT);
-         staticFileLocation("/public");
+         //run from eclipse
+         //staticFileLocation("./public");
+         //run from jar
+         externalStaticFileLocation(System.getProperty("app.home")+"/public");
          AnnotationConfigApplicationContext context = initSpringConfigs();
          new AuthenticationResource(context.getBean(AuthenticationService.class));
          new UrlDataResource(context.getBean(UrlDataService.class));
