@@ -65,8 +65,18 @@
         <artifactId>spring-jdbc</artifactId>
         <version>${spring.version}</version>
     </dependency>
+    <dependency>
+		<groupId>org.apache.poi</groupId>
+		<artifactId>poi</artifactId>
+		<version>3.15-beta2</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.apache.poi</groupId>
+    	<artifactId>poi-ooxml</artifactId>
+    	<version>3.15-beta2</version>
+	</dependency>
   </dependencies>
-  
+  <!-- 
   <build>
 		<finalName>app-server</finalName>
 		<plugins>
@@ -146,5 +156,5 @@
         	</resource>
     	</resources>
 	</build>
-	
+	 -->
 </project>
