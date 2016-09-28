@@ -95,6 +95,7 @@
 				  <excludes>
 					<exclude>**/log4j.properties</exclude>
 					<exclude>**/address.properties</exclude>
+					<exclude>**/Procfiles</exclude>
 				  </excludes>
 				  <archive>
 					<manifest>
@@ -148,6 +149,7 @@
       			<includes>
         			<include>address.properties</include>
         			<include>log4j.properties</include>
+        			<include>Procfile</include>
       			</includes>
         	</resource>
         	<resource>
