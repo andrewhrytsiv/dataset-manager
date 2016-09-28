@@ -136,7 +136,7 @@
 					<!-- application name -->
 					<appName>dataset-manager</appName>
 					<processTypes>
-						<web>java -jar ./server/app-server.jar</web>
+						<web>java -jar server/app-server.jar</web>
 					</processTypes>
 				</configuration>
 			</plugin>
