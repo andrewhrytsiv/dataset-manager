@@ -30,10 +30,6 @@ public class SpringDatabaseConfig {
 	@Bean
     public DataSource dataSource() {
 		 DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		 System.out.println("DRIVER_NAME->" + env.getProperty(DRIVER_NAME));
-		 System.out.println("URL->" + env.getProperty(URL));
-		 System.out.println("USERNAME->" + env.getProperty(USERNAME));
-		 System.out.println("PASSWORD->" + env.getProperty(PASSWORD));
          dataSource.setDriverClassName(env.getProperty(DRIVER_NAME));
          dataSource.setUrl(env.getProperty(URL));
          dataSource.setUsername(env.getProperty(USERNAME));
