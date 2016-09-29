@@ -1,0 +1,18 @@
+.box{
+    margin-top: 50px;
+    margin-left: 100px;
+    display: inline-block;
+}
+.box:hover{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #D0D0D0;
+}
+
+.github-image{
+    content:url(../images/github-icon.png);
+}
+
+.doggy-jam-image{
+    content:url(../images/doggy-jam.png);
+}
