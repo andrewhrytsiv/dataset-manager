@@ -10,3 +10,5 @@
 1. From Eclipce run Maven build
 2. Place server folder from dataset-manager/target where you want
 3. Run from cmd "java -jar app-server.jar" to start application
+
+Heroku link https://dataset-manager.herokuapp.com
