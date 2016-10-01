@@ -2,6 +2,8 @@
     'use strict';
  
     var app = angular.module('client_app');
-	
 
+    app.controller('HomeController', function($scope){
+        console.log("Hello world Home! ");
+    });
 })();

@@ -3,12 +3,13 @@ var app = angular.module('client_app', [
     'ngResource',
     'ngSanitize',
     'ngRoute',
-    'ngStorage'
+    'ngStorage',
+    'ngMaterial',
+    'flow'
 ]);
 
 app.config(function ($routeProvider) {
     $routeProvider.when('/', {
-        //templateUrl: 'views/list.html',
         templateUrl: 'home/home.html',
         controller: 'HomeController'
     }).when('/login',{
@@ -17,46 +18,27 @@ app.config(function ($routeProvider) {
     }).when('/register',{
         templateUrl: 'register/register.html',
         controller: 'RegisterController'
-    }).when('/url_data', {
-        templateUrl: 'url_data/url_data.html',
-        controller: 'UrlDataController'
+    }).when('/dashboard', {
+        templateUrl: 'dashboard/dashboard.html',
+        controller: 'DashboardController'
     }).otherwise({
         redirectTo: '/'
     })
 });
-
-app.controller('HomeController', function($scope){
-    console.log("Hello world Home!");
-});
-
-app.controller('ListCtrl', function ($scope, $http) {
-    $http.get('/api/todos').success(function (data) {
-        $scope.todos = data;
-    }).error(function (data, status) {
-        console.log('Error ' + data)
-    })
-
-    $scope.todoStatusChanged = function (todo) {
-        console.log(todo);
-        $http.put('/api/todos/' + todo.id, todo).success(function (data) {
-            console.log('status changed');
-        }).error(function (data, status) {
-            console.log('Error ' + data)
-        })
+/*
+app.run(function($rootScope, $http, $location, $localStorage){
+    // keep user logged in after page refresh
+    if ($localStorage.currentUser) {
+        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
     }
-});
 
-app.controller('CreateCtrl', function ($scope, $http, $location) {
-    $scope.todo = {
-        done: false
-    };
-
-    $scope.createTodo = function () {
-        console.log($scope.todo);
-        $http.post('/api/todos', $scope.todo).success(function (data) {
-            $location.path('/');
-        }).error(function (data, status) {
-            console.log('Error ' + data)
-        })
-    }
+    // redirect to login page if not logged in and trying to access a restricted page
+    $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        var publicPages = ['/login'];
+        var restrictedPage = publicPages.indexOf($location.path()) === -1;
+        if (restrictedPage && !$localStorage.currentUser) {
+            $location.path('/login');
+        }
+    });
 });
+    */

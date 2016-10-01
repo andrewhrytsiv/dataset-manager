@@ -1,3 +1,8 @@
 .inline-class{
     display: inline-block;
 }
+.container-header{
+    font-weight: bold;
+    font-size: medium;
+    text-align: right;
+}

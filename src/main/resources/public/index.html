@@ -1,7 +1,7 @@
-<!DOCTYPE html>
 <html ng-app="client_app">
 <head>
     <title>dataset-manager</title>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/home.css">
@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<div class="container" ng-view="">
+<div class="container" ng-view="" ng-cloak>
     <!-- Container views -->
 </div>
 
@@ -33,12 +33,20 @@
 <script src="/js/angular-cookies.js"></script>
 <script src="/js/angular-sanitize.js"></script>
 <script src="/js/angular-resource.js"></script>
+<script src="/js/angular-animate.js"></script>
+<script src="/js/angular-aria.js"></script>
+<script src="/js/angular-messages.js"></script>
+<script src="/js/ng-flow-standalone.js"></script>
+<!-- Angular Material Library -->
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+<!-- ngStorage -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+<!-- Application modules -->
 <script src="/app.js"></script>
 <script src="/app-services/AuthenticationService.js"></script>
-
 <script src="/register/RegisterController.js"></script>
 <script src="/login/LoginController.js"></script>
-<script src="/url_data/UrlDataController.js"></script>
+<script src="/home/HomeController.js"></script>
+<script src="/dashboard/DashboardController.js"></script>
 </body>
 </html>
