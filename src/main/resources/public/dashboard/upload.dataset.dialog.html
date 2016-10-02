@@ -1,0 +1,37 @@
+<md-dialog aria-label="File/URL loader">
+    <form ng-cloak>
+        <md-toolbar layout="row">
+            <div class="md-toolbar-tools">
+                <h3>File/URL Loader</h3>
+            </div>
+            <md-switch ng-model="switcher.url" aria-label="Enable Indicators">
+                <h5>URL </h5>
+            </md-switch>
+            <span flex></span>
+        </md-toolbar>
+
+        <md-content layout-padding layout-align="start end" ng-show="!switcher.url">
+            <upload-file-component></upload-file-component>
+        </md-content>
+
+        <md-input-container ng-show="switcher.url" class="md-block">
+            <label>URL LINK</label>
+            <input ng-model="datasetUrl">
+        </md-input-container>
+
+        <md-radio-group ng-model="fileType">
+            <md-radio-button ng-repeat="fType in fileTypes" ng-value="fType.value" ng-disabled=" fType.isDisabled " ng-class="{'md-align-top-left': $index==1}" >
+                {{ fType.label }}<br/>
+            </md-radio-button>
+        </md-radio-group>
+
+        <md-divider></md-divider>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button class="md-primary" ng-click="uploadDataset()">
+                Upload
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

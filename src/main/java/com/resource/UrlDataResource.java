@@ -24,7 +24,7 @@ import com.util.Utility;
 
 
 
-public class UrlDataResource {
+public class UrlDataResource extends Resource{
 	private final static Logger LOGGER = LoggerFactory.getLogger(UrlDataResource.class);
 	
 	private UrlDataService urlDataService;
@@ -34,7 +34,7 @@ public class UrlDataResource {
 		setupEndpoints();
 	}
 	
-	private void setupEndpoints() {
+	protected void setupEndpoints() {
 		
 		get(Bootstrap.API_CONTEXT + "/url_data", "application/json", (request, response) -> urlDataService.findAll(), new JsonTransformer());
 		

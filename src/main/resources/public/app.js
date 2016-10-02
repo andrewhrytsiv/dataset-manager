@@ -5,7 +5,7 @@ var app = angular.module('client_app', [
     'ngRoute',
     'ngStorage',
     'ngMaterial',
-    'flow'
+    'ngFileUpload'
 ]);
 
 app.config(function ($routeProvider) {

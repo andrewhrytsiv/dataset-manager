@@ -45,5 +45,9 @@ public class XLSXFileModel implements DatasetFileModel{
 	public void setI18nModel(Table<String, String, String> i18nModel) {
 		this.i18nModel = i18nModel;
 	}
-
+	
+	@Override
+	public String toString(){
+		return i18nModel.toString();
+	}
 }

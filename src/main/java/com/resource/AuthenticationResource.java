@@ -4,9 +4,6 @@ import static spark.Spark.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import com.bootstrap.Bootstrap;
 import com.entity.User;
@@ -17,7 +14,7 @@ import com.service.AuthenticationService;
 import static com.util.HTTPHelper.*;
 import com.util.Utility;
 
-public class AuthenticationResource {
+public class AuthenticationResource extends Resource{
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationResource.class);
 	
@@ -28,7 +25,7 @@ public class AuthenticationResource {
 		setupEndpoints();
 	}
 
-	private void setupEndpoints() {
+	protected void setupEndpoints() {
 		
 		post(Bootstrap.API_CONTEXT + "/register", "application/json", (request, response) -> {
 			JsonObject  userObject = new JsonParser().parse(request.body()).getAsJsonObject();

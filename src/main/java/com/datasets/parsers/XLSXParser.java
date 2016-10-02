@@ -2,6 +2,7 @@ package com.datasets.parsers;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,6 +24,19 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 	public static int I18N_SHEET_INDEX = 3;
 	
 	private XLSXFileModel fileModel = new XLSXFileModel();
+	
+	@Override
+	public XLSXFileModel read(InputStream xlsxFile) throws Exception {
+		try (XSSFWorkbook workbook = new XSSFWorkbook(xlsxFile)) {
+			readMetadata(workbook.getSheetAt(METADATA_SHEET_INDEX));
+			readData(workbook.getSheetAt(DATA_SHEET_INDEX));
+			readDictionary(workbook.getSheetAt(DICTIONARY_SHEET_INDEX));
+			readI18N(workbook.getSheetAt(I18N_SHEET_INDEX));
+		}finally {
+			xlsxFile.close();
+		}
+		return fileModel;
+	}
 	
 	@Override
 	public XLSXFileModel read(File file) throws Exception {
@@ -107,5 +121,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		}
 		return columIndexNameMap;
 	}
+
+	
 
 }
