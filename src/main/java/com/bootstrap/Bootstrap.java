@@ -10,8 +10,10 @@ import java.security.CodeSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.resource.AuthenticationResource;
+import com.resource.DashboardResource;
 import com.resource.UrlDataResource;
 import com.service.AuthenticationService;
+import com.service.DashboardService;
 import com.service.UrlDataService;
 
 public class Bootstrap {
@@ -25,6 +27,7 @@ public class Bootstrap {
          AnnotationConfigApplicationContext context = initSpringConfigs();
          new AuthenticationResource(context.getBean(AuthenticationService.class));
          new UrlDataResource(context.getBean(UrlDataService.class));
+         new DashboardResource(context.getBean(DashboardService.class));
     }
     
     private static int getHerokuAssignedPort() {
