@@ -1,5 +1,9 @@
 package com.entity;
 
+import java.nio.charset.StandardCharsets;
+
+import com.google.common.hash.Hashing;
+
 public class User {
 	
 	private Integer id;
@@ -54,5 +58,7 @@ public class User {
 				+ role + "]";
 	}
 	
-	
+	public static String hash(String password){
+		return Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
+	}
 }

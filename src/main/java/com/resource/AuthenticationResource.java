@@ -32,7 +32,7 @@ public class AuthenticationResource extends Resource{
 			String email = userObject.get(EMAIL).getAsString();
 			String username = userObject.get(USER_NAME).getAsString();
 			String password = userObject.get(PASSWORD).getAsString();
-			User newUser = new User(email, username, password);
+			User newUser = new User(email, username, User.hash(password));
 			if (Utility.isNotEmptyValues(Lists.newArrayList(email, username, password)) && authService.registrer(newUser)) {
 				LOGGER.info("New user was regiter "+newUser);
 				JsonObject body = getAuthenticateResponseJson(newUser);
@@ -49,7 +49,7 @@ public class AuthenticationResource extends Resource{
 			String email = userObject.get(EMAIL).getAsString();
 			String password = userObject.get(PASSWORD).getAsString();
 			User user = authService.getUser(email);
-			if(user != null && password.equals(user.getPassword())){
+			if(user != null && User.hash(password).equals(user.getPassword())){
 				LOGGER.info(user.toString()+" was login. ");
 				JsonObject body = getAuthenticateResponseJson(user);
 				response.status(OK_STATUS);
