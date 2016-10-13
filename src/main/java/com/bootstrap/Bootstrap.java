@@ -11,6 +11,7 @@ import com.resource.UrlDataResource;
 import com.service.AuthenticationService;
 import com.service.DashboardService;
 import com.service.UrlDataService;
+import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class Bootstrap {
 	
@@ -28,6 +29,7 @@ public class Bootstrap {
          new AuthenticationResource(context.getBean(AuthenticationService.class));
          new UrlDataResource(context.getBean(UrlDataService.class));
          new DashboardResource(context.getBean(DashboardService.class));
+         enableDebugScreen();
     }
 
 	private static AnnotationConfigApplicationContext initSpringConfigs() {
