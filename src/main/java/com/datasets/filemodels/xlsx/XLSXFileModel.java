@@ -3,6 +3,7 @@ package com.datasets.filemodels.xlsx;
 import java.util.Map;
 
 import com.datasets.filemodels.DatasetFileModel;
+import com.google.common.base.Joiner;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
@@ -48,6 +49,6 @@ public class XLSXFileModel implements DatasetFileModel{
 	
 	@Override
 	public String toString(){
-		return i18nModel.toString();
+		return Joiner.on("\n").join(metadataModel.toString(), dictionaryModel.toString(),i18nModel.toString());
 	}
 }

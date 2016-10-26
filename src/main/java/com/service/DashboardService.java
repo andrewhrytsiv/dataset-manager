@@ -22,13 +22,8 @@ public class DashboardService {
 	public boolean insertDataset(InputStream fileInStream, String type){
 		XLSXParser parser = new XLSXParser();
 		try (ByteArrayInputStream input = new ByteArrayInputStream(ByteStreams.toByteArray(fileInStream))){
-//			 byte[] buffer = new byte[fileInStream.available()];
-//			 fileInStream.read(buffer);
-//			 File targetFile = new File("D:/AndrewWorkSpace/workspace_neon/dataset-manager/src/main/resources/"+"my_data."+type);
-//			 Files.write(buffer, targetFile);
-			 
-			
-			XLSXFileModel model = parser.read(input);
+			String message = parser.read(input);
+			XLSXFileModel model = parser.getFileModel();
 			System.out.println(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
