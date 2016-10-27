@@ -29,3 +29,12 @@ create table url_data(
 	file bytea,
 	file_type varchar(10)
 );
+
+create table datasets(
+	id serial,
+	dataset_id uuid,
+	snapshot_date date,
+	json_data json,
+	private boolean,
+	owner_user varchar(50)
+);
