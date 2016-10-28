@@ -6,3 +6,9 @@
     font-size: medium;
     text-align: right;
 }
+.upload-dataset-dialog form {
+    min-width: 372px;
+}
+.upload-dataset-dialog md-switch:last-of-type {
+    margin-right: 14px;
+}
