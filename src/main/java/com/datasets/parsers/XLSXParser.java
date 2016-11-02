@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -17,6 +18,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.datasets.filemodels.xlsx.XLSXFileModel;
 import com.datasets.json.JSNode;
 import com.datasets.json.JSObject;
+import com.datasets.query.IDLabel;
+import com.datasets.query.Query;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -44,6 +47,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 	
 	private XLSXFileModel fileModel = new XLSXFileModel();
 	private List<String> warningsList;
+	private JSObject metadataJO;
 	
 	public XLSXFileModel getFileModel(){
 		return fileModel;
@@ -184,8 +188,8 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		if(keyNotExistOrValueEmpty(metaData, DATASET_TOPICS)){
 			warnings.add("List of topics is empty");
 		}
-		JSObject json = new JSObject(metaData);
-		JSNode dimensionNode = json.getNodeByPath(DIMENSION);
+		metadataJO = new JSObject(metaData);
+		JSNode dimensionNode = metadataJO.getNodeByPath(DIMENSION);
 		if(dimensionNode == null){
 			throw new ParseValidationError("Cannot find dataset dimension.");
 		}
@@ -197,7 +201,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 				warnings.add("Cannot find dimension."+ dimChild.key() +".role");
 			}
 		}
-		JSNode layoutNode = json.getNodeByPath(LAYOUT);
+		JSNode layoutNode = metadataJO.getNodeByPath(LAYOUT);
 		if(layoutNode == null){
 			throw new ParseValidationError("Cannot find metadata.layout");
 		}
@@ -233,8 +237,36 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		return !metaData.containsKey(key) || Strings.isNullOrEmpty(metaData.get(key));
 	}
 	
+	public void buildJson(){
+		 metadata();
+	}
+	
 	public void metadata(){
-		
+		JSNode dimensionNode = metadataJO.getNodeByPath(DIMENSION);
+		JSNode layoutNode = metadataJO.getNodeByPath(LAYOUT);
+		Table<Integer,String,String> dataModel = fileModel.getData();
+		for(JSNode dimChild : dimensionNode.childNodes()){
+			String idColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(ID);
+			String labelColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(LABEL);
+			List<IDLabel> result = new Query<IDLabel>() {
+				public Query<IDLabel> map(List<String> columns) {
+					String idName = columns.get(0);
+					String labelName = columns.get(1);
+					table.rowMap().entrySet().stream().forEach(row -> {
+						Map<String, String> rowValues = row.getValue();
+						IDLabel mapedValue = new IDLabel(rowValues.get(idName), rowValues.get(labelName));
+						result.add(mapedValue);
+					});
+					return this;
+				}
+			}
+			.from(dataModel)
+			.map(Lists.newArrayList(idColumnName, labelColumnName))
+			.distinct()
+			.orderBy(true)
+			.get();
+			result.forEach(System.out::println);
+		}
 	}
 
 }
