@@ -11,23 +11,17 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
 
-public class Query<T extends Comparable<T>> {
+public abstract class Query<T extends Comparable<T>> {
 	
-	Table<Integer,String,String> table;
-	List<T> result = Lists.newArrayList();
+	protected Table<Integer,String,String> table;
+	protected List<T> result = Lists.newArrayList();
 	
 	public Query<T> from(Table<Integer,String,String> fromTable){
 		table = fromTable;
 		return this;
 	}
 	
-	public Query<T> map(Function<Map<String,String>, T> map){
-		table.rowMap().entrySet().stream().forEach( row -> {
-			Map<String,String> rowValues = row.getValue();
-			result.add(map.apply(rowValues));
-		});
-		return this;
-	}
+	public abstract Query<T> map(List<String> columns);
 	
 	public Query<T> filter(Predicate<T> filter){
 		List<T> target = result.stream().filter(filter).collect(Collectors.toList());

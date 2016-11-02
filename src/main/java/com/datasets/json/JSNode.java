@@ -3,8 +3,6 @@ package com.datasets.json;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.springframework.jdbc.datasource.lookup.IsolationLevelDataSourceRouter;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
