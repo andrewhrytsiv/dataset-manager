@@ -3,8 +3,8 @@ package com.datasets.query;
 import com.google.common.collect.ComparisonChain;
 
 public class IDLabel implements Comparable<IDLabel>{
-	String id;
-	String label;
+	public final String id;
+	public final String label;
 	
 	public IDLabel(String id, String label) {
 		this.id = id;
