@@ -20,6 +20,7 @@ import com.datasets.json.JSNode;
 import com.datasets.json.JSObject;
 import com.datasets.query.IDLabel;
 import com.datasets.query.Query;
+import com.datasets.query.RowData;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -248,13 +249,14 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		for(JSNode dimChild : dimensionNode.childNodes()){
 			String idColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(ID);
 			String labelColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(LABEL);
-			List<IDLabel> result = new Query<IDLabel>() {
-				public Query<IDLabel> map(List<String> columns) {
+			
+			List<RowData> result = new Query<RowData>() {
+				public Query<RowData> map(List<String> columns) {
 					String idName = columns.get(0);
 					String labelName = columns.get(1);
 					table.rowMap().entrySet().stream().forEach(row -> {
 						Map<String, String> rowValues = row.getValue();
-						IDLabel mapedValue = new IDLabel(rowValues.get(idName), rowValues.get(labelName));
+						RowData mapedValue = new RowData().add(ID, rowValues.get(idName)).add(LABEL, rowValues.get(labelName));
 						result.add(mapedValue);
 					});
 					return this;
@@ -271,6 +273,14 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 	}
 	
 	public void data(){
-		
+		JSNode dimensionNode = metadataJO.getNodeByPath(DIMENSION);
+		JSNode layoutNode = metadataJO.getNodeByPath(LAYOUT);
+		Table<Integer,String,String> dataModel = fileModel.getData();
+		List<RowData> result = new Query<RowData>() {
+			public Query<RowData> map(List<String> columns) {
+				
+				return this;
+			}
+		}.get();
 	}
 }
