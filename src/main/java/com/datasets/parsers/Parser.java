@@ -15,4 +15,6 @@ public abstract class Parser<T> {
 	
 	public abstract List<String> getWarnings();
 	
+	public abstract String buildJson();
+	
 }
