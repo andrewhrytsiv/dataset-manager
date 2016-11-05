@@ -12,8 +12,8 @@ public class XLSXFileModel implements DatasetFileModel{
 	
 	private Map<String,String> metadataModel = Maps.newLinkedHashMap();
 	private Table<Integer,String,String> dataModel =  HashBasedTable.create();
-	private Table<String,String,String> dictionaryModel =  HashBasedTable.create();
-	private Table<String,String,String> i18nModel =  HashBasedTable.create();
+	private Table<Integer,String,String> dictionaryModel =  HashBasedTable.create();
+	private Table<Integer,String,String> i18nModel =  HashBasedTable.create();
 
 	public Map<String,String> getMetaData() {
 		return metadataModel;
@@ -31,19 +31,19 @@ public class XLSXFileModel implements DatasetFileModel{
 		this.dataModel = dataModel;
 	}
 
-	public Table<String,String,String> getDictionary() {
+	public Table<Integer,String,String> getDictionary() {
 		return dictionaryModel;
 	}
 	
-	public void setDictionaryModel(Table<String, String, String> dictionaryModel) {
+	public void setDictionaryModel(Table<Integer, String, String> dictionaryModel) {
 		this.dictionaryModel = dictionaryModel;
 	}
 	
-	public Table<String,String,String> getI18N() {
+	public Table<Integer,String,String> getI18N() {
 		return i18nModel;
 	}
 	
-	public void setI18nModel(Table<String, String, String> i18nModel) {
+	public void setI18nModel(Table<Integer, String, String> i18nModel) {
 		this.i18nModel = i18nModel;
 	}
 	

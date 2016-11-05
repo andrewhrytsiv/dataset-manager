@@ -5,9 +5,13 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 
 public class JSNode {
+	private static final String EMPTY_STRING = "";
+	private static final String DOUBLE_DOT = ":";
+	private static String QUOTES = "\"";
 	private JSNode parent;
 	private String currentNodeKey;
 	private boolean root;
@@ -25,6 +29,10 @@ public class JSNode {
 	
 	public void setRoot(boolean isRoot){
 		root = isRoot; 
+	}
+	public void addPath(String keyPath, String value){
+		LinkedList<String> keyPathList = new LinkedList<>( Splitter.on(".").splitToList(keyPath));
+		addPath(keyPathList, value);
 	}
 	
 	public void addPath(LinkedList<String> keyPath, String value){
@@ -94,13 +102,40 @@ public class JSNode {
 	
 	@Override
 	public String toString(){
-		List<String> atrributeList = keyValueMap.entrySet().stream().map(entry -> entry.getKey()+":'"+entry.getValue()+"'").collect(Collectors.toList());
-		List<String> nodeAttrList = childNodeMap.entrySet().stream().map(entry -> entry.getKey()+":{"+entry.getValue().toString()+"}").collect(Collectors.toList());
+		List<String> atrributeList = keyValueMap.entrySet().stream().map(entry -> {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			if (key.contains(JSObject.ARRAY)) {
+				key = key.replace(JSObject.ARRAY, EMPTY_STRING);
+				List<String> wrapedValueList = Lists.newArrayList();
+				Splitter.on(",").split(value).forEach(v -> {
+					wrapedValueList.add(wrap(v));
+				});
+				value = "[" + Joiner.on(",").join(wrapedValueList) + "]";
+				return wrap(key) + DOUBLE_DOT + value;
+			} else if (key.contains(JSObject.ARRAY_WRAPPED)) {
+				key = key.replace(JSObject.ARRAY_WRAPPED, EMPTY_STRING);
+				value = "[" + value + "]";
+				return wrap(key) + DOUBLE_DOT + value;
+			} else if (key.contains(JSObject.OBJECT)) {
+				key = key.replace(JSObject.OBJECT, EMPTY_STRING);
+				return wrap(key) + DOUBLE_DOT + value;
+			} else {
+				return wrap(key) + DOUBLE_DOT + wrap(value);
+			}
+		}).collect(Collectors.toList());
+		List<String> nodeAttrList = childNodeMap.entrySet().stream().map(entry -> {
+			return wrap(entry.getKey()) + ":{" + entry.getValue().toString() + "}";
+		}).collect(Collectors.toList());
 		atrributeList.addAll(nodeAttrList);
 		return Joiner.on(",").join(atrributeList);
 	}
 	
 	public static <T> boolean onlyOne(Collection<T> list){
 		return list.size() == 1 ? true : false;
+	}
+	
+	public static String wrap(String keyOrValue){
+		return QUOTES+keyOrValue+QUOTES;
 	}
 }

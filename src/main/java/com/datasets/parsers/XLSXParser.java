@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -18,9 +17,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.datasets.filemodels.xlsx.XLSXFileModel;
 import com.datasets.json.JSNode;
 import com.datasets.json.JSObject;
-import com.datasets.query.IDLabel;
 import com.datasets.query.Query;
 import com.datasets.query.RowData;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -48,7 +47,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 	
 	private XLSXFileModel fileModel = new XLSXFileModel();
 	private List<String> warningsList;
-	private JSObject metadataJO;
+	private JSObject product = new JSObject();
 	
 	public XLSXFileModel getFileModel(){
 		return fileModel;
@@ -114,48 +113,27 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 	}
 
 	private void readData(XSSFSheet dataSheet){
-		Table<Integer,String,String> dataModel = fileModel.getData();
-		Iterator<Row> rowIter = dataSheet.rowIterator();
-		Row headerRow = rowIter.next();		
-		int start = headerRow.getFirstCellNum();
-		int end = headerRow.getLastCellNum() - 1;
-		Map<Integer,String> columIndexNameMap = getHeaderColumnIndexNameMap(headerRow, start, end);
-		while(rowIter.hasNext()){
-			Row row = (Row) rowIter.next();
-			for(int colIndex=start; colIndex<=end; colIndex++){
-				dataModel.put(row.getRowNum(), columIndexNameMap.get(colIndex), Objects.toString(row.getCell(colIndex), ""));
-			}
-		}
+		readFromTable(dataSheet, fileModel.getData());
 	}
 	
 	private void readDictionary(XSSFSheet dictionarySheet){
-		Table<String,String,String> dictionaryModel = fileModel.getDictionary();
-		Iterator<Row> rowIter = dictionarySheet.rowIterator();
-		Row headerRow = rowIter.next();		
-		int start = headerRow.getFirstCellNum();
-		int end = headerRow.getLastCellNum() - 1;
-		Map<Integer,String> columIndexNameMap = getHeaderColumnIndexNameMap(headerRow, start, end);
-		while(rowIter.hasNext()){
-			Row row = (Row) rowIter.next();
-			String keyValue = row.getCell(start).toString();
-			for(int colIndex=start+1; colIndex<=end; colIndex++){
-				dictionaryModel.put(keyValue, columIndexNameMap.get(colIndex), Objects.toString(row.getCell(colIndex), ""));
-			}
-		}
+		readFromTable(dictionarySheet, fileModel.getDictionary());
 	}
 	
 	private void readI18N(XSSFSheet i18nSheet){
-		Table<String,String,String> i18nModel = fileModel.getI18N();
-		Iterator<Row> rowIter = i18nSheet.rowIterator();
+		readFromTable(i18nSheet, fileModel.getI18N());
+	}
+
+	private void readFromTable(XSSFSheet sourceTable, Table<Integer, String, String> modelTable) {
+		Iterator<Row> rowIter = sourceTable.rowIterator();
 		Row headerRow = rowIter.next();
 		int start = headerRow.getFirstCellNum();
 		int end = headerRow.getLastCellNum() - 1;
 		Map<Integer,String> columIndexNameMap = getHeaderColumnIndexNameMap(headerRow, start, end);
 		while(rowIter.hasNext()){
 			Row row = (Row) rowIter.next();
-			String keyValue = row.getCell(start).toString();
-			for(int colIndex=start+1; colIndex<=end; colIndex++){
-				i18nModel.put(keyValue, columIndexNameMap.get(colIndex), Objects.toString(row.getCell(colIndex), ""));
+			for(int colIndex=start; colIndex<=end; colIndex++){
+				modelTable.put(row.getRowNum(), columIndexNameMap.get(colIndex), Objects.toString(row.getCell(colIndex), ""));
 			}
 		}
 	} 
@@ -189,7 +167,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		if(keyNotExistOrValueEmpty(metaData, DATASET_TOPICS)){
 			warnings.add("List of topics is empty");
 		}
-		metadataJO = new JSObject(metaData);
+		JSObject metadataJO = new JSObject(metaData);
 		JSNode dimensionNode = metadataJO.getNodeByPath(DIMENSION);
 		if(dimensionNode == null){
 			throw new ParseValidationError("Cannot find dataset dimension.");
@@ -238,19 +216,26 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		return !metaData.containsKey(key) || Strings.isNullOrEmpty(metaData.get(key));
 	}
 	
-	public void buildJson(){
-		 metadata();
+	public String buildJson(){
+		 List<String> warns = warningsList.stream().map(warnMessge -> JSNode.wrap(warnMessge)).collect(Collectors.toList());
+		 product.addPath("validation"+JSObject.ARRAY_WRAPPED,Joiner.on(",").join(warns));
+		 product.addPath("metadata"+JSObject.OBJECT, metadata());
+		 product.addPath("data"+JSObject.ARRAY_WRAPPED, data());
+		 product.addPath("dictionary"+JSObject.ARRAY_WRAPPED, dictionary());
+		 return product.toString();
 	}
 	
-	public void metadata(){
+	private String metadata(){
+		Map<String,String> metaData = fileModel.getMetaData();
+		JSObject metadataJO = new JSObject(metaData);
 		JSNode dimensionNode = metadataJO.getNodeByPath(DIMENSION);
 		JSNode layoutNode = metadataJO.getNodeByPath(LAYOUT);
 		Table<Integer,String,String> dataModel = fileModel.getData();
 		for(JSNode dimChild : dimensionNode.childNodes()){
 			String idColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(ID);
 			String labelColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(LABEL);
-			
 			List<RowData> result = new Query<RowData>() {
+				
 				public Query<RowData> map(List<String> columns) {
 					String idName = columns.get(0);
 					String labelName = columns.get(1);
@@ -267,20 +252,85 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 			.distinct()
 			.orderBy(true)
 			.get();
-			result.forEach(System.out::println);
-			//metadataJO add values
+//			Ask Boldak if we need add values in metadata search
+//			metaData.put(DIMENSION+"."+dimChild+"."+"values[]", Joiner.on(",").join(result));
+			dimChild.addPath("values"+JSObject.ARRAY_WRAPPED, Joiner.on(",").join(result));
 		}
+		return metadataJO.toString();
 	}
 	
-	public void data(){
+	private String data(){
+		JSObject metadataJO = new JSObject(fileModel.getMetaData());
 		JSNode dimensionNode = metadataJO.getNodeByPath(DIMENSION);
 		JSNode layoutNode = metadataJO.getNodeByPath(LAYOUT);
 		Table<Integer,String,String> dataModel = fileModel.getData();
 		List<RowData> result = new Query<RowData>() {
+			
 			public Query<RowData> map(List<String> columns) {
-				
+				table.rowMap().entrySet().stream().forEach(row -> {
+					Map<String, String> rowValues = row.getValue();
+					String valueColumnName = layoutNode.getKeyValueMap().get(VALUE);
+					RowData mapedValue = new RowData();
+					for(JSNode dimChild : dimensionNode.childNodes()){
+						String labelColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(LABEL);
+						String idColumnName = layoutNode.getNode(dimChild.key()).getKeyValueMap().get(ID);
+						mapedValue.add(dimChild.key(), rowValues.get(labelColumnName));
+						mapedValue.add("#"+dimChild.key(), rowValues.get(idColumnName));
+					}
+					mapedValue.add("#"+VALUE, rowValues.get(valueColumnName));
+					result.add(mapedValue);
+				});
 				return this;
 			}
-		}.get();
+		}
+		.from(dataModel)
+		.map(Lists.newArrayList())
+		.get();
+		String dictionaryJsonArrayValues = Joiner.on(",").join(result);
+		return dictionaryJsonArrayValues;
+	}
+	
+	private String dictionary(){
+		Table<Integer,String,String> dictionary = fileModel.getDictionary();
+		List<String> result = new Query<String>() {
+			
+			public Query<String> map(List<String> columns) {
+				table.rowMap().entrySet().stream().forEach(row -> {
+					JSObject pathJson = new JSObject();
+					row.getValue().entrySet().stream().forEach( column -> {
+						pathJson.addPath(column.getKey(), column.getValue());
+					});
+					result.add(pathJson.toString());
+				});
+				return this;
+			}
+		}
+		.from(dictionary)
+		.map(Lists.newArrayList())
+		.get();
+		result.addAll(i18n());
+		String dictionaryJsonArrayValues = Joiner.on(",").join(result);
+		return dictionaryJsonArrayValues;
+	}
+	
+	private List<String> i18n(){
+		Table<Integer,String,String> i18n = fileModel.getI18N();
+		List<String> result = new Query<String>() {
+			
+			public Query<String> map(List<String> columns) {
+				table.rowMap().entrySet().stream().forEach(row -> {
+					JSObject pathJson = new JSObject();
+					row.getValue().entrySet().stream().forEach( column -> {
+						pathJson.addPath(column.getKey(), column.getValue());
+					});
+					result.add(pathJson.toString());
+				});
+				return this;
+			}
+		}
+		.from(i18n)
+		.map(Lists.newArrayList())
+		.get();
+		return result;
 	}
 }

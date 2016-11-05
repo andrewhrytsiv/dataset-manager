@@ -3,8 +3,7 @@ package com.datasets.query;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,8 @@ public abstract class Query<T extends Comparable<T>> {
 	} 
 	
 	public Query<T> distinct(){
-		result = Lists.newArrayList(new LinkedHashSet<T>(result));
+		Set<T> set = new LinkedHashSet<T>(result);
+		result = Lists.newArrayList(set);
 		return this;
 	}
 	
