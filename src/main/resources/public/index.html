@@ -13,11 +13,12 @@
     <div class="container-fluid" ng-controller="HeaderController">
         <div class="navbar-header">
             <div class="navbar-brand" ng-show="!isUserUndefined()" ng-bind="currentUser.username"> </div>
-            <!--<a class="navbar-brand" href="/">DSetManager</a>-->
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="/">Home</a></li>
             <li ng-show="!isUserUndefined()"><a href="/dashboard">Dashboard</a></li>
+            <li><a href="https://github.com/andrewhrytsiv/dataset-manager">GitHub</a></a></li>
+            <li><a href="http://wdc-app-develop.herokuapp.com">About</a></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li ng-show="isUserUndefined()"><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
