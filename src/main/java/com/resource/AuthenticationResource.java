@@ -44,12 +44,12 @@ public class AuthenticationResource extends Resource{
             return EMPTY_RESPONSE;
         });
 		
-		post(Bootstrap.API_CONTEXT + "/authenticate", "application/json",(request, response) -> {
+		post(Bootstrap.API_CONTEXT + "/login", "application/json",(request, response) -> {
 			JsonObject  userObject = new JsonParser().parse(request.body()).getAsJsonObject();
 			String email = userObject.get(EMAIL).getAsString();
 			String password = userObject.get(PASSWORD).getAsString();
 			User user = authService.getUser(email);
-			if(user != null && User.hash(password).equals(user.getPassword())){
+			if(user != null && /*User.hash(password)*/password.equals(user.getPassword())){
 				LOGGER.info(user.toString()+" was login. ");
 				JsonObject body = getAuthenticateResponseJson(user);
 				response.status(OK_STATUS);

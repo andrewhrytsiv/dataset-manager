@@ -39,7 +39,7 @@ public class UserDAOSql implements UserDAO{
 
 	@Override
 	public User find(String email) {
-		String sql = "SELECT * FROM users WHERE email = ? and ";
+		String sql = "SELECT * FROM users WHERE email = ? ";
 		User user = (User)jdbcTemplate.queryForObject(sql, new Object[] {email}, new UserRowMapper());
 		return user;
 	} 

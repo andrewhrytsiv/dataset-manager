@@ -32,7 +32,7 @@ public class DashboardResource extends Resource{
 
 	protected void setupEndpoints() {
 		
-		post(Bootstrap.API_CONTEXT + "/dashboard/fileupload", (request, response) -> {
+		post(Bootstrap.API_CONTEXT + "/protected/dashboard/fileupload", (request, response) -> {
 			 MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp");
 			 request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
 			 Part file = request.raw().getPart("file"); //file is name of the upload form

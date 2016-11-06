@@ -47,7 +47,7 @@
             console.log($scope.files[0]);
             var fileToLoad = $scope.files[0];
             Upload.upload({
-                url: 'api/dashboard/fileupload',
+                url: 'api/protected/dashboard/fileupload',
                 file: fileToLoad,
                 progress: function (e) {
                 }
