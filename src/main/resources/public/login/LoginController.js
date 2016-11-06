@@ -3,28 +3,22 @@
  
     var app = angular.module('client_app');
 	
-    app.controller('LoginController', function($location, AuthenticationService){
-        var vm = this;
- 
-        vm.login = login;
- 
-        initController();
- 
-        function initController() {
-            // reset login status
-            AuthenticationService.Logout();
-        };
- 
-        function login() {
-            vm.loading = true;
-            AuthenticationService.Login(vm.email, vm.password, function (result) {
-                if (result === true) {
-                    $location.path('/');
-                } else {
-                    vm.error = 'Username or password is incorrect';
-                    vm.loading = false;
-                }
-            });
+    app.controller('LoginController', function($scope, $http,$location, AuthenticationService){
+
+        $scope.submit = function() {
+            $http.post('/api/login',{ email : $scope.email, password : $scope.password})
+                .success(function (response) {
+                    console.log('resp_data:'+JSON.stringify(response));
+                    if(response.access_token){
+                        var currentUser = { username: response.username, access_token: response.access_token };
+                        AuthenticationService.setCurrentUser(currentUser);
+                        $http.defaults.headers.common.Authorization = 'Bearer ' + response.access_token;
+                        $location.path('/');
+                    }})
+                .error(function (response, status) {
+                    //add message on view
+                    console.log('Error ' + response);
+                })
         };
     });
 

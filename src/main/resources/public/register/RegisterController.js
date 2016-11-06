@@ -3,15 +3,14 @@
  
     var app = angular.module('client_app');
 	
-	app.controller('RegisterController', function($scope, $http,$window,$location){
+	app.controller('RegisterController', function($scope, $http,$window,$location,AuthenticationService){
 	   $scope.submit = function() {
             $http.post('/api/register',{ email : $scope.email,
              username : $scope.username,password : $scope.password})
             .success(function (response) {
-                console.log('resp_data:'+JSON.stringify(response));
                 if(response.access_token){
-                    var currentUser = { username: response.username, token: response.token };
-                    $window.localStorage.setItem("currentUser",currentUser);
+                    var currentUser = { username: response.username, access_token: response.access_token };
+                    AuthenticationService.setCurrentUser(currentUser);
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.access_token;
                     $location.path('/'); 
                 }})

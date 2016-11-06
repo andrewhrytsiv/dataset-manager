@@ -6,6 +6,16 @@
     font-size: medium;
     text-align: right;
 }
+
+/*.user-name{*/
+    /*font-size: 16px;*/
+    /*color: green;*/
+    /*margin-top: 15px;*/
+/*}*/
+
+.ng-hide{
+    display: none;
+}
 .upload-dataset-dialog form {
     min-width: 372px;
 }
