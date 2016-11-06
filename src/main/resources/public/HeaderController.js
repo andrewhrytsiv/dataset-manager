@@ -7,7 +7,7 @@
         $scope.currentUser = AuthenticationService.getCurrentUser();
 
         $scope.isUserUndefined = function(){
-            return $scope.currentUser.username == undefined;
+            return !$scope.currentUser.username;
         };
 
         $scope.logout = function(){
