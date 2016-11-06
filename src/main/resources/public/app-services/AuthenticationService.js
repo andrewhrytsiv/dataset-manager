@@ -18,7 +18,8 @@
 
         service.logout = function(){
             $window.localStorage.clear();
-            currentUser = undefined;
+            currentUser.username = null;
+            currentUser.access_token = null;
         };
     }
 })();
