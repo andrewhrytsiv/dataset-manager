@@ -38,3 +38,11 @@ create table datasets(
 	private boolean,
 	owner_user varchar(50)
 );
+
+create table metadata_key_value(
+	id serial,
+	key varchar(200),
+	value text,
+	dset_id uuid,
+	table_name varchar(20) 
+);
