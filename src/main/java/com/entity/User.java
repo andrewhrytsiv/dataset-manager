@@ -54,8 +54,7 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", userName=" + userName + ", password=" + password + ", role="
-				+ role + "]";
+		return "User [ email=" + email + ", userName=" + userName + "]";
 	}
 	
 	public static String hash(String password){
