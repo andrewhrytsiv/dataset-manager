@@ -3,7 +3,7 @@
  
     var app = angular.module('client_app');
 	
-    app.controller('LoginController', function($scope, $http,$location, AuthenticationService){
+    app.controller('LoginController', function($scope, $http,$location, AuthenticationService,$mdDialog){
 
         $scope.submit = function() {
             $http.post('/api/login',{ email : $scope.email, password : $scope.password})
@@ -16,10 +16,23 @@
                         $location.path('/');
                     }})
                 .error(function (response, status) {
-                    //add message on view
-                    console.log('Error ' + response);
+                    showAlert(response)
                 })
         };
+
+        function showAlert(response) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title('Sorry, but it\'s not valid credentials.')
+                    .textContent(response.error_message)
+                    .ariaLabel('Alert Dialog Demo')
+                    .ok('OK')
+                    .targetEvent(response)
+            );
+        };
+
     });
 
 })();
