@@ -7,10 +7,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.resource.AuthenticationResource;
 import com.resource.DashboardResource;
-import com.resource.UrlDataResource;
+import com.resource.DatasetResource;
 import com.service.AuthenticationService;
 import com.service.DashboardService;
-import com.service.UrlDataService;
+import com.service.DatasetService;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class Bootstrap {
@@ -27,7 +27,7 @@ public class Bootstrap {
          externalStaticFileLocation(System.getProperty("app.home")+"/public");
          AnnotationConfigApplicationContext context = initSpringConfigs();
          new AuthenticationResource(context.getBean(AuthenticationService.class));
-         new UrlDataResource(context.getBean(UrlDataService.class));
+         new DatasetResource(context.getBean(DatasetService.class));
          new DashboardResource(context.getBean(DashboardService.class));
          enableDebugScreen();
     }
