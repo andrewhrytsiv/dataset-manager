@@ -46,6 +46,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 	public static String I18N_SHEET = "i18n";
 	
 	private XLSXFileModel fileModel = new XLSXFileModel();
+	private String datasetId;
 	private List<String> warningsList;
 	private JSObject product = new JSObject();
 	
@@ -151,6 +152,8 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		Map<String,String> metaData = fileModel.getMetaData();
 		if(keyNotExistOrValueEmpty(metaData, DATASET_ID)){
 			throw new ParseValidationError("Cannot find metadata.dataset.id. Create and download new dataset with dataset manager'");
+		}else{
+			datasetId = metaData.get(DATASET_ID);
 		}
 		if(keyNotExistOrValueEmpty(metaData, DATASET_COMMIT_NOTE)){
 			warnings.add("Metadata.dataset.commit.note is empty");
@@ -223,6 +226,10 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		 product.addPath("data"+JSObject.ARRAY_WRAPPED, data());
 		 product.addPath("dictionary"+JSObject.ARRAY_WRAPPED, dictionary());
 		 return product.toString();
+	}
+	
+	public String getDatasetId(){
+		return datasetId;
 	}
 	
 	private String metadata(){

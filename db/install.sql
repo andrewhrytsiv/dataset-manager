@@ -23,25 +23,19 @@ $$ language plpgsql;
 
 CREATE TRIGGER users_default_role_id BEFORE INSERT ON users FOR EACH ROW EXECUTE PROCEDURE default_role_id();
 
-create table url_data(
-	id SERIAL not null,
-	url varchar,
-	file bytea,
-	file_type varchar(10)
-);
-
 create table datasets(
 	id serial,
 	dataset_id uuid,
-	snapshot_date date,
 	json_data json,
-	private boolean,
-	owner_user varchar(50)
+	personal boolean,
+	snapshot_date date,
+	owner varchar(50)
 );
+
 
 create table metadata_key_value(
 	id serial,
-	key varchar(200),
+	key text,
 	value text,
 	dset_id uuid,
 	table_name varchar(20) 

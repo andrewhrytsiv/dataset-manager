@@ -3,22 +3,41 @@ package com.bootstrap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.resource.AuthenticationResource;
+import com.resource.DashboardResource;
+import com.resource.DatasetResource;
 import com.service.AuthenticationService;
 import com.service.DashboardService;
-import com.service.UrlDataService;
+import com.service.DatasetService;
 
 @Configuration
 public class SpringAppConfig {
+	
+	@Bean
+    public AuthenticationResource authenticationResource() {
+        return new AuthenticationResource();
+    }
 	@Bean
     public AuthenticationService authenticationService() {
         return new AuthenticationService();
     }
+	
 	@Bean
-    public UrlDataService urlDataService() {
-        return new UrlDataService();
+    public DatasetResource datasetResource() {
+        return new DatasetResource();
     }
+	@Bean
+    public DatasetService datasetService() {
+        return new DatasetService();
+    }
+	
+	@Bean
+	public DashboardResource dashboardResource(){
+		return new DashboardResource();
+	}
 	@Bean
 	public DashboardService dashboardService(){
 		return new DashboardService();
 	}
+	
 }
