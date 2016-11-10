@@ -6,15 +6,8 @@ import static spark.Spark.*;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
-
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.resource.AuthenticationResource;
-import com.resource.DashboardResource;
-import com.resource.UrlDataResource;
-import com.service.AuthenticationService;
-import com.service.DashboardService;
-import com.service.UrlDataService;
 
 public class Bootstrap {
 	
@@ -24,10 +17,7 @@ public class Bootstrap {
     public static void main(String[] args) throws URISyntaxException {
          port(getHerokuAssignedPort());
          externalStaticFileLocation(getPublicFolderPath());
-         AnnotationConfigApplicationContext context = initSpringConfigs();
-         new AuthenticationResource(context.getBean(AuthenticationService.class));
-         new UrlDataResource(context.getBean(UrlDataService.class));
-         new DashboardResource(context.getBean(DashboardService.class));
+         initSpringConfigs();
     }
     
     private static int getHerokuAssignedPort() {
