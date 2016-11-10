@@ -10,28 +10,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dao.DatasetDAO;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
 
-@Repository 
+@Repository
 public class DatasetDAOSql implements DatasetDAO{
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired 
-    public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+	private PlatformTransactionManager platformTransactionManager;
+	
+	@Autowired 
+    public void setDataSource(DataSource source) {
+		this.dataSource = source;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
 	@Override
-	@Transactional
 	public void insert(Dataset dataset, MetadataKeyValue metadata) throws DataAccessException, SQLException {	
-		insert(dataset);
-		insert(metadata);
+		DefaultTransactionDefinition paramTransactionDefinition = new DefaultTransactionDefinition();
+		TransactionStatus status=platformTransactionManager.getTransaction(paramTransactionDefinition );
+		try{
+			insert(dataset);
+			insert(metadata);
+		  platformTransactionManager.commit(status);
+		}catch (Exception e) {
+		  platformTransactionManager.rollback(status);
+		}
 	}
 	
 	private void insert(Dataset dataset) throws DataAccessException, SQLException{

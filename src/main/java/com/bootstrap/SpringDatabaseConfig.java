@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.dao.DatasetDAO;
 import com.dao.UserDAO;
@@ -39,20 +40,17 @@ public class SpringDatabaseConfig {
     }
 	
 	@Bean
-	public DataSourceTransactionManager transactionDataSource(){
-		DataSourceTransactionManager transactionDataSource = new DataSourceTransactionManager();
-		return transactionDataSource;
-	}
+    public PlatformTransactionManager txManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
 	
 	@Bean
 	public UserDAO userDAO(){
-		UserDAO userDAO = new UserDAOSql();
-		return userDAO;
+		return new UserDAOSql();
 	}
 	
 	@Bean
 	public DatasetDAO datasetDAO(){
-		DatasetDAO dataset = new DatasetDAOSql();
-		return dataset;
+		return new DatasetDAOSql();
 	}
 }
