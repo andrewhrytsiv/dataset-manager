@@ -11,9 +11,10 @@ import javax.servlet.http.Part;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bootstrap.Bootstrap;
-import com.entity.UrlData;
+import com.entity.Dataset;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.DashboardService;
@@ -22,11 +23,10 @@ import com.util.JsonTransformer;
 public class DashboardResource extends Resource{
 	private final static Logger LOGGER = LoggerFactory.getLogger(DashboardResource.class);
 	
+	@Autowired
 	private DashboardService dashboardService;
 	
-	
-	public DashboardResource(DashboardService dashboardService) {
-		this.dashboardService = dashboardService;
+	public DashboardResource() {
 		setupEndpoints();
 	}
 
@@ -37,7 +37,9 @@ public class DashboardResource extends Resource{
 			 request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
 			 Part file = request.raw().getPart("file"); //file is name of the upload form
 			 System.out.println(file.getContentType());
-			 if (dashboardService.insertDataset(file.getInputStream(), "xlsx")) {
+			 DashboardService.DSetContext context = new DashboardService.DSetContext();
+			 context.setUserName("Andrew");
+			 if (dashboardService.insertDataset(file.getInputStream(), context)) {
 					response.status(OK_STATUS);
 					return "some data";
 				} else {

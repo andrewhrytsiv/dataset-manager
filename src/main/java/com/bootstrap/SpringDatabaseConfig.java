@@ -7,11 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import com.dao.UrlDataDAO;
+import com.dao.DatasetDAO;
 import com.dao.UserDAO;
-import com.dao.sql.UrlDataDAOSql;
+import com.dao.sql.DatasetDAOSql;
 import com.dao.sql.UserDAOSql;
 
 @Configuration
@@ -38,14 +39,20 @@ public class SpringDatabaseConfig {
     }
 	
 	@Bean
+	public DataSourceTransactionManager transactionDataSource(){
+		DataSourceTransactionManager transactionDataSource = new DataSourceTransactionManager();
+		return transactionDataSource;
+	}
+	
+	@Bean
 	public UserDAO userDAO(){
 		UserDAO userDAO = new UserDAOSql();
 		return userDAO;
 	}
 	
 	@Bean
-	public UrlDataDAO usrlDataDAO(){
-		UrlDataDAO urlDataDAO = new UrlDataDAOSql();
-		return urlDataDAO;
+	public DatasetDAO datasetDAO(){
+		DatasetDAO dataset = new DatasetDAOSql();
+		return dataset;
 	}
 }

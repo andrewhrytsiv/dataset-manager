@@ -8,7 +8,6 @@
         $scope.submit = function() {
             $http.post('/api/login',{ email : $scope.email, password : $scope.password})
                 .success(function (response) {
-                    console.log('resp_data:'+JSON.stringify(response));
                     if(response.access_token){
                         var currentUser = { username: response.username, access_token: response.access_token };
                         AuthenticationService.setCurrentUser(currentUser);

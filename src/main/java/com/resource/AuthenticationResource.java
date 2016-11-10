@@ -4,6 +4,7 @@ import static spark.Spark.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bootstrap.Bootstrap;
 import com.entity.User;
@@ -18,10 +19,10 @@ public class AuthenticationResource extends Resource{
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationResource.class);
 	
-	public AuthenticationService authService;
+	@Autowired
+	private AuthenticationService authService;
 	
-	public AuthenticationResource(AuthenticationService authenticationService){
-		this.authService = authenticationService;
+	public AuthenticationResource(){
 		setupEndpoints();
 	}
 
