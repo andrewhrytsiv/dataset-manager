@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.filter.ProtectedFilter;
+
 
 public class Bootstrap {
 	
@@ -17,8 +19,13 @@ public class Bootstrap {
     public static void main(String[] args) throws URISyntaxException {
          port(getHerokuAssignedPort());
          externalStaticFileLocation(getPublicFolderPath());
+         setFilters();
          initSpringConfigs();
     }
+    
+    private static void setFilters() { 
+		before(API_CONTEXT + "/protected/*", new ProtectedFilter());
+	}
     
     private static int getHerokuAssignedPort() {
         ProcessBuilder processBuilder = new ProcessBuilder();
