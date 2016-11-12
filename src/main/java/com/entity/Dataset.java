@@ -12,9 +12,10 @@ public class Dataset {
 
 	private UUID uuid;
 	private String jsonData;
+	private String url;
 	private boolean personal;
 	private LocalDateTime snapshotDate;
-	private String owner;
+	private Integer ownerId;
 
 	public UUID getUuid() {
 		return uuid;
@@ -55,11 +56,19 @@ public class Dataset {
 		this.snapshotDate = snapshotDate;
 	}
 
-	public String getOwner() {
-		return owner;
+	public Integer getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner(String owner) {
-		this.owner = owner;
+	public void setOwnerId(Integer ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

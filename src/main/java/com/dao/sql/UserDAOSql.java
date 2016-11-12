@@ -42,6 +42,13 @@ public class UserDAOSql implements UserDAO{
 		String sql = "SELECT * FROM users WHERE email = ? ";
 		User user = (User)jdbcTemplate.queryForObject(sql, new Object[] {email}, new UserRowMapper());
 		return user;
+	}
+
+	@Override
+	public User find(Integer id) {
+		String sql = "SELECT * FROM users WHERE id = ? ";
+		User user = (User)jdbcTemplate.queryForObject(sql, new Object[] {id}, new UserRowMapper());
+		return user;
 	} 
 
 }

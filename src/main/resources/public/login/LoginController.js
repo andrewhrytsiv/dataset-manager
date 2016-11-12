@@ -12,7 +12,7 @@
                         var currentUser = { username: response.username, access_token: response.access_token };
                         AuthenticationService.setCurrentUser(currentUser);
                         $http.defaults.headers.common.Authorization = 'Bearer ' + response.access_token;
-                        $location.path('/');
+                        $location.path('/dashboard');
                     }})
                 .error(function (response, status) {
                     showAlert(response)

@@ -8,4 +8,6 @@ public interface UserDAO {
 	
 	public User find(String email);
 	
+	public User find(Integer id);
+	
 }
