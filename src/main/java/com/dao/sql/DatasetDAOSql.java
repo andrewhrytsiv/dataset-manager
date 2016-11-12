@@ -2,6 +2,7 @@ package com.dao.sql;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
@@ -33,6 +34,19 @@ public class DatasetDAOSql implements DatasetDAO{
     }
 
 	@Override
+	public Dataset find(UUID datasetId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean exist(UUID datasetId) {
+		String sql = "SELECT COUNT(dataset_id) FROM datasets WHERE dataset_id = ?";
+		Integer count = (Integer) jdbcTemplate.queryForObject(sql, new Object[] { datasetId }, Integer.class);
+		return count > 0 ? true : false;
+	}
+	
+	@Override
 	public void insert(Dataset dataset, MetadataKeyValue metadata) throws DataAccessException, SQLException {	
 		DefaultTransactionDefinition paramTransactionDefinition = new DefaultTransactionDefinition();
 		TransactionStatus status=platformTransactionManager.getTransaction(paramTransactionDefinition );
@@ -46,8 +60,8 @@ public class DatasetDAOSql implements DatasetDAO{
 	}
 	
 	private void insert(Dataset dataset) throws DataAccessException, SQLException{
-		String sql = "INSERT INTO datasets (dataset_id, json_data, personal, snapshot_date, owner) VALUES (?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, new Object[] {dataset.getUuid(), dataset.getPGJson(), dataset.isPersonal(), dataset.getSnapshotDate(), dataset.getOwner()});
+		String sql = "INSERT INTO datasets (dataset_id, json_data, url, personal, snapshot_date, owner) VALUES (?, ?, ?, ?, ?, ?)";
+		jdbcTemplate.update(sql, new Object[] {dataset.getUuid(), dataset.getPGJson(), dataset.getUrl(), dataset.isPersonal(), dataset.getSnapshotDate(), dataset.getOwnerId()});
 	}
 	
 	private void insert(MetadataKeyValue metadata){
@@ -59,8 +73,8 @@ public class DatasetDAOSql implements DatasetDAO{
 	}
 
 	@Override
-	public Dataset find(String uuid) {
-		// TODO Auto-generated method stub
-		return null;
+	public void update(Dataset dataset) throws DataAccessException, SQLException {
+		String sql = "UPDATE datasets SET  json_data = ?, url = ?, snapshot_date = ?, owner = ? WHERE dataset_id = ?";
+		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getUrl(), dataset.getSnapshotDate(), dataset.getOwnerId(), dataset.getUuid()});
 	}
 }

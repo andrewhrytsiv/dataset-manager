@@ -33,7 +33,7 @@ app.config(function ($routeProvider,$locationProvider) {
     $locationProvider.html5Mode(true);
 });
 
-app.run(['$rootScope', function($rootScope) {
+app.run(['$rootScope','AuthenticationService', function($rootScope, AuthenticationService) {
     $rootScope.$on('$routeChangeSuccess', function (event, current) {
         $rootScope.title = current.$$route.title;
     });

@@ -1,6 +1,7 @@
 package com.dao;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.springframework.dao.DataAccessException;
 
@@ -9,7 +10,12 @@ import com.entity.MetadataKeyValue;
 
 public interface DatasetDAO {
 	
-	void insert(Dataset dataset,MetadataKeyValue metadata) throws DataAccessException, SQLException;
+	boolean exist(UUID datasetId);
 	
-	Dataset find(String uuid);
+	Dataset find(UUID datasetId);
+	
+	void insert(Dataset dataset,MetadataKeyValue metadata) throws DataAccessException, SQLException;
+
+	void update(Dataset dataset) throws DataAccessException, SQLException;
+	
 }
