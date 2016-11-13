@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <base href="/">
 </head>
-<body>
+<body class="{{bodyClass}}">
 <div class="navbar navbar-inverse">
     <div class="container-fluid" ng-controller="HeaderController">
         <div class="navbar-header">
@@ -17,7 +17,7 @@
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
             <li ng-show="!isUserUndefined()"><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/api">API</a></li>
+            <li><a href="/apidoc">API</a></li>
             <li><a href="https://github.com/andrewhrytsiv/dataset-manager">GitHub</a></a></li>
             <li><a href="http://wdc-app-develop.herokuapp.com">About</a></a></li>
         </ul>

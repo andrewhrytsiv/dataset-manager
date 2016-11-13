@@ -1,0 +1,61 @@
+swagger: '2.0'
+
+info:
+  version: "1.0"
+  title: Dataset API
+
+paths:
+  /api/dataset/get/:datasetID:
+    get:
+      description: |
+        Get `Dataset` object as json.
+      parameters:
+        -
+          name: datasetID
+          in: query
+          description: It's unique id for dataset.
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: Dataset JSON
+            type: string
+  # Post for same path(key).
+    post:
+      description: |
+        Get `Dataset` object as json.
+      parameters:
+        -
+          name: datasetID
+          in: query
+          description: It's unique id for dataset.
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: Dataset JSON
+            type: string
+  /api/dataset/create:
+   post:
+      description: |
+        Need discuss with Boldak.
+      parameters:
+        -
+          name: datasetID
+          in: query
+          description: It's unique id for dataset.
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: Dataset JSON
+            type: string

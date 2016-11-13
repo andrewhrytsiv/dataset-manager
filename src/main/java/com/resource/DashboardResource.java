@@ -38,6 +38,10 @@ public class DashboardResource extends Resource{
 
 	protected void setupEndpoints() {
 		
+		get(API_CONTEXT + "/protected/dashboard/datasets", "application/json",
+				(request, response) -> datasetService.findByUser(Utility.getUserId(request)),
+				new JsonTransformer());
+		
 		post(API_CONTEXT + "/protected/dashboard/fileupload", (request, response) -> {
 			MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp");
 			request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
@@ -76,8 +80,5 @@ public class DashboardResource extends Resource{
 			return EMPTY_RESPONSE;
 		});
 		
-		post(API_CONTEXT + "/protected/dashboard/datasets", "application/json",
-				(request, response) -> datasetService.findByUser(Utility.getUserId(request)),
-				new JsonTransformer());
 	}
 }
