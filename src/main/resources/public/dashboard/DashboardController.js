@@ -2,7 +2,10 @@
     'use strict';
     var app = angular.module('client_app');
 
-    app.controller('DashboardController', function ($scope, $http, $mdDialog) {
+    app.controller('DashboardController', function ($scope, $http, $mdDialog, $location, AuthenticationService) {
+        $scope.datasets = [];
+        loadDatasets();
+
         $scope.showDatasetLoaderDialog = function (ev) {
             $mdDialog.show({
                 controller: DatasetLoaderDialog,
@@ -16,6 +19,23 @@
             }, function () {
                 $scope.status = 'You cancelled the dialog.';
             });
+        };
+
+         function loadDatasets(){
+            $http.post('/api/protected/dashboard/datasets',{ msg : "Test"})
+                .success(function (response) {
+                    console.log("response-->"+JSON.stringify(response));
+                    $scope.datasets =  response;
+                })
+                .error(function (response, status) {
+                    $scope.datasets = [];
+                    if(status == 401){
+                        AuthenticationService.logout();
+                        $location.path('/login');
+                    }else{
+                        console.log('Error status: ' + resp.status);
+                    }
+                });
         };
     });
 
@@ -54,24 +74,25 @@
             }else{
                 var fileToLoad = $scope.files[0];
                 Upload.upload({
-                    url: 'api/protected/dashboard/fileupload',
+                    url: 'api/protected/dashboard/fileupload?type='+$scope.fileType,
                     file: fileToLoad,
                     // data: { file: fileToLoad,'type':$scope.fileType},
                     progress: function (e) {
                     }
                 }).then(function (resp) {
+                    loadDatasets();
                     $mdDialog.cancel();
                 },function (resp) {
                     $mdDialog.cancel();
                     if(resp.status == 401){
                         AuthenticationService.logout();
-                        $location.path('/');
+                        $location.path('/login');
                     }else{
                         console.log('Error status: ' + resp.status);
                     }
                 }, function (evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    console.log('progress: ' + progressPercentage+'%');
+                    // console.log('progress: ' + progressPercentage+'%');
                 });
             }
 

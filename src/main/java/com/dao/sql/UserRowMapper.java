@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.entity.User;
 
-public class UserRowMapper implements RowMapper<Object>{
+public class UserRowMapper implements RowMapper<User>{
 
 	@Override
-	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 		User user = new User();
 		user.setId(rs.getInt("user_id"));
 		user.setRole(rs.getInt("role_id"));

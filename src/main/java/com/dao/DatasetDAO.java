@@ -1,6 +1,7 @@
 package com.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.dao.DataAccessException;
@@ -17,5 +18,7 @@ public interface DatasetDAO {
 	void insert(Dataset dataset,MetadataKeyValue metadata) throws DataAccessException, SQLException;
 
 	void update(Dataset dataset) throws DataAccessException, SQLException;
-	
+
+	List<Dataset> findByUser(Integer userId);
+
 }

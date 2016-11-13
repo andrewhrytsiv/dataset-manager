@@ -1,15 +1,19 @@
 package com.service;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.dao.DatasetDAO;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
+import com.entity.SimpleDatasetRender;
+import com.util.Utility;
 
-@Component
 public class DatasetService {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(DatasetService.class);
@@ -30,5 +34,17 @@ public class DatasetService {
 		}
 		return true;
 		
+	}
+
+	public List<SimpleDatasetRender> findByUser(Integer userId) {
+		List<SimpleDatasetRender> simpleList = datasetDAO.findByUser(userId).stream().map(dataset -> {
+			SimpleDatasetRender dset = new SimpleDatasetRender();
+			dset.setId(dataset.getUuid().toString());
+			dset.setUrl(dataset.getUrl());
+			dset.setPersonal(dataset.isPersonal());
+			dset.setSnapshotDate(dataset.getSnapshotDate().format(DateTimeFormatter.ofPattern(Utility.DATE_FORMAT)));
+			return dset;
+		}).collect(Collectors.toList());
+		return simpleList;
 	}
 }

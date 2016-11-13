@@ -35,7 +35,7 @@ create table datasets(
 	url text,
 	personal boolean,
 	snapshot_date timestamp,
-	owner varchar(50)
+	owner integer
 );
 
 
