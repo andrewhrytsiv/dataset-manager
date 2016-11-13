@@ -1,13 +1,14 @@
 package com.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import com.google.common.base.Strings;
 
+import spark.Request;
+
 public class Utility {
+	
+	public static String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
 	public static boolean isNotEmptyValues(List<String> values){
 		for(String value : values){
@@ -16,6 +17,10 @@ public class Utility {
 			}
 		}
 		return true;
+	}
+	
+	public static Integer getUserId(Request request){
+		return (Integer) request.raw().getAttribute(HTTPHelper.USER_ID);
 	}
 	
 }

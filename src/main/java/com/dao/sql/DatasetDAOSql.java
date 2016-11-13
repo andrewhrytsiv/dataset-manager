@@ -1,7 +1,9 @@
 package com.dao.sql;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.dao.DatasetDAO;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
+import com.google.common.collect.Lists;
 
 @Repository
 public class DatasetDAOSql implements DatasetDAO{
@@ -35,8 +38,26 @@ public class DatasetDAOSql implements DatasetDAO{
 
 	@Override
 	public Dataset find(UUID datasetId) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM users WHERE dataset_id = ? ";
+		Dataset dataset = (Dataset)jdbcTemplate.queryForObject(sql, new Object[] {datasetId}, new DatasetRowMapper());
+		return dataset;
+	}
+	
+	@Override
+	public List<Dataset> findByUser(Integer userId) {
+		List<Dataset> datasetList = Lists.newArrayList();
+		String sql = "SELECT dataset_id, url, personal,snapshot_date FROM datasets ORDER BY snapshot_date DESC";
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+		for (Map<String, Object> row : rows) {
+			Dataset dataset = new Dataset();
+			dataset.setUuid((UUID)(row.get("dataset_id")));
+			dataset.setUrl((String)row.get("url"));
+			dataset.setPersonal((Boolean)row.get("personal"));
+			Timestamp date = (Timestamp)row.get("snapshot_date");
+			dataset.setSnapshotDate(date.toLocalDateTime());
+			datasetList.add(dataset);
+		}
+		return datasetList;
 	}
 
 	@Override
@@ -77,4 +98,5 @@ public class DatasetDAOSql implements DatasetDAO{
 		String sql = "UPDATE datasets SET  json_data = ?, url = ?, snapshot_date = ?, owner = ? WHERE dataset_id = ?";
 		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getUrl(), dataset.getSnapshotDate(), dataset.getOwnerId(), dataset.getUuid()});
 	}
+
 }

@@ -1,18 +1,20 @@
 <div class="dashboard-container" ng-cloak flow-init>
-    <div ng-controller="DashboardController">
+    <div>
         <md-content>
             <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab label="new datasets">
+                <md-tab label="datasets">
                     <md-content class="md-padding">
                         <md-button class="md-primary md-raised" ng-click="showDatasetLoaderDialog($event)">
                             Upload dataset
                         </md-button>
 
                         <div>
-                            <md-list flex>
-                                <md-list-item class="md-3-line" ng-click="null">
+                            <md-list flex ng-model="datasets">
+                                <md-list-item class="md-3-line"  ng-repeat="dset in datasets" ng-click="null">
                                     <div class="md-list-item-text" layout="column">
-                                        Text
+                                        <h3>ID: {{ dset.id }}</h3>
+                                        <h3>date: {{ dset.snapshotDate }}</h3>
+                                        <h3 ng-show="dset.url" >URL: {{ dset.url }}</h3>
                                     </div>
                                 </md-list-item>
                             </md-list>
