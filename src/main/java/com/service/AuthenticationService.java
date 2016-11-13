@@ -1,7 +1,7 @@
 package com.service;
 
 import java.security.Key;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -64,7 +64,7 @@ public class AuthenticationService {
 	}
 	
 	public String generateJWT(int userId){
-		long exp = getExpirationDate();
+		String exp = LocalDateTime.now().plusHours(6).toString();
 		JsonObject tokenData = new JsonObject();
 		tokenData.addProperty("user_id", userId);
 		tokenData.addProperty("exp", exp);
@@ -73,12 +73,6 @@ public class AuthenticationService {
 	
 	private String createJWT(String data){
 		return Jwts.builder().setSubject(data).signWith(SignatureAlgorithm.HS512, JWT_KEY).compact();
-	}
-	
-	private long getExpirationDate(){
-		ZonedDateTime zdateTime = ZonedDateTime.now();
-		zdateTime = zdateTime.plusHours(12);
-		return zdateTime.toEpochSecond();
 	}
 	
 	public static String getJWTData(String jwt){
