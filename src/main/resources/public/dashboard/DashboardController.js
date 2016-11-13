@@ -22,7 +22,7 @@
         };
 
          function loadDatasets(){
-            $http.post('/api/protected/dashboard/datasets',{ msg : "Test"})
+            $http.get('/api/protected/dashboard/datasets')
                 .success(function (response) {
                     console.log("response-->"+JSON.stringify(response));
                     $scope.datasets =  response;

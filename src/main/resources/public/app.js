@@ -25,6 +25,9 @@ app.config(function ($routeProvider,$locationProvider) {
         title: 'Dashboard',
         templateUrl: 'dashboard/dashboard.html',
         controller: 'DashboardController'
+    }).when('/apidoc', {
+        title: 'API',
+        templateUrl: 'apidoc/api.doc.html',
     }).otherwise({
         title: 'Home',
         redirectTo: '/'
@@ -32,20 +35,6 @@ app.config(function ($routeProvider,$locationProvider) {
     // use the HTML5 History API
     $locationProvider.html5Mode(true);
 });
-
-// app.run(['$rootScope','$localStorage','$http', function($rootScope,$localStorage,$http) {
-//     // keep user logged in after page refresh
-//     if ($localStorage.currentUser) {
-//         console.log($localStorage.currentUser)
-//         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.access_token;
-//     }
-//
-//
-//     $rootScope.$on('$routeChangeSuccess', function (event, current) {
-//         $rootScope.title = current.$$route.title;
-//     });
-// }]);
-
 
 app.run(function($rootScope, $http, $location, $localStorage,AuthenticationService){
     // keep user logged in after page refresh
@@ -57,5 +46,6 @@ app.run(function($rootScope, $http, $location, $localStorage,AuthenticationServi
 
     $rootScope.$on('$routeChangeSuccess', function (event, current) {
         $rootScope.title = current.$$route.title;
+        $rootScope.bodyClass = ($rootScope.title + '-page').toLowerCase();
     });
 });

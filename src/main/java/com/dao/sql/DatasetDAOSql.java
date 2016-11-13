@@ -38,7 +38,7 @@ public class DatasetDAOSql implements DatasetDAO{
 
 	@Override
 	public Dataset find(UUID datasetId) {
-		String sql = "SELECT * FROM users WHERE dataset_id = ? ";
+		String sql = "SELECT * FROM datasets WHERE dataset_id = ? ";
 		Dataset dataset = (Dataset)jdbcTemplate.queryForObject(sql, new Object[] {datasetId}, new DatasetRowMapper());
 		return dataset;
 	}

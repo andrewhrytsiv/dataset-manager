@@ -2,6 +2,7 @@ package com.service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -20,6 +21,10 @@ public class DatasetService {
 	
 	@Autowired
 	private DatasetDAO datasetDAO;
+	
+	public Dataset find(UUID datasetId){
+		return datasetDAO.find(datasetId);
+	}
 	
 	public boolean saveDataset(Dataset dataset, MetadataKeyValue metadata){
 		try{
