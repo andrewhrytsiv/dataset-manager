@@ -8,7 +8,7 @@ import static com.util.HTTPHelper.UNAUTHORIZED_STATUS;
 import static com.util.HTTPHelper.USER_ID;
 import static spark.Spark.halt;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import com.google.common.base.Strings;
@@ -33,12 +33,11 @@ public class ProtectedFilter implements Filter{
 					@SuppressWarnings("unchecked")
 					Map<String, Object> attrMap = new Gson().fromJson(data, Map.class);
 					int user_id = ((Number)attrMap.get(USER_ID)).intValue();
-					int time = ((Number)attrMap.get(EXPIRATION)).intValue();
+					String time = (String)attrMap.get(EXPIRATION);
 					request.raw().setAttribute(USER_ID, user_id);
-//					Date now = new Date();
-//					if(now.before(new Date(time))){ time wrong value to convert
+					if(LocalDateTime.now().isBefore(LocalDateTime.parse(time))){ 
 						authenticated = true;
-//					}
+					}
 				}
 			}
 		}catch(Exception e){}
