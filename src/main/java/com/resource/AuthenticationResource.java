@@ -12,7 +12,9 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.AuthenticationService;
-import static com.util.HTTPHelper.*;
+import static com.util.AppConstants.*;
+
+import com.util.HTTP;
 import com.util.Utility;
 
 public class AuthenticationResource extends Resource{
@@ -37,10 +39,10 @@ public class AuthenticationResource extends Resource{
 			if (Utility.isNotEmptyValues(Lists.newArrayList(email, username, password)) && authService.registrer(newUser)) {
 				LOGGER.info("New user was regiter "+newUser);
 				JsonObject body = getAuthenticateResponseJson(newUser);
-				response.status(OK_STATUS);
+				response.status(HTTP.OK);
 				return body.toString();
 			} else {
-				response.status(UNAUTHORIZED_STATUS);
+				response.status(HTTP.UNAUTHORIZED);
 			}
             return EMPTY_RESPONSE;
         });
@@ -54,7 +56,7 @@ public class AuthenticationResource extends Resource{
 			if(user != null && User.hash(password).equals(user.getPassword())){
 				LOGGER.info(user.toString()+" was login. ");
 				JsonObject body = getAuthenticateResponseJson(user);
-				response.status(OK_STATUS);
+				response.status(HTTP.OK);
 				return body.toString();
 			}else{
 				String message = "";
@@ -65,7 +67,7 @@ public class AuthenticationResource extends Resource{
 				}
 				LOGGER.error("Failed to login: " + message);
 				messageJson.addProperty("error_message", message);
-				response.status(UNAUTHORIZED_STATUS);
+				response.status(HTTP.UNAUTHORIZED);
 			}
 			return messageJson.toString();
 		});

@@ -1,13 +1,6 @@
 package com.util;
 
-public class HTTPHelper {
-	public static int OK_STATUS = 201;
-	public static int UNAUTHORIZED_STATUS = 401;
-	public static int NOT_FOUND = 404;
-	public static int ACCEPTED = 202;
-	public static int INTERNAL_SERVER_ERROR = 500;
-	
-	
+public class AppConstants {
 	public static final String USER_NAME = "username";
 	public static final String USER_ID = "user_id";
 	public static final String EMAIL = "email";
