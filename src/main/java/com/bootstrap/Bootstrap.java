@@ -1,21 +1,9 @@
 package com.bootstrap;
 
 import static spark.Spark.*;
-import static com.util.HTTPHelper.*;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import com.filter.ProtectedFilter;
-import com.google.common.base.Strings;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.service.AuthenticationService;
-
-
 import static spark.debug.DebugScreen.enableDebugScreen;
-
-import java.util.Date;
-import java.util.Map;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import com.filter.ProtectedFilter;
 
 public class Bootstrap {
 	
