@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.bootstrap.Bootstrap.*;
 
+import com.google.common.base.Strings;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.DashboardService;
@@ -53,9 +54,13 @@ public class DashboardResource extends Resource{
 					.withType(request.queryParams("type"));
 			if (dashboardService.saveDatasetFromXLSXFile(file.getInputStream(), context)) {
 				response.status(HTTP.OK);
-				return "some data";
 			} else {
 				response.status(HTTP.INTERNAL_SERVER_ERROR);
+			}
+			if(!Strings.isNullOrEmpty(context.getMessage())){
+				JsonObject  messageJson = new JsonObject();
+				messageJson.addProperty(ERROR_MESSAGE, context.getMessage());
+				return messageJson.toString();
 			}
 			return EMPTY_RESPONSE;
 		});
@@ -74,9 +79,13 @@ public class DashboardResource extends Resource{
 					.withUrl(url);
 			if (dashboardService.saveDatasetFromXLSXFile(fileStream, context)) {
 				response.status(HTTP.OK);
-				return "some data";
 			} else {
 				response.status(HTTP.INTERNAL_SERVER_ERROR);
+			}
+			if(!Strings.isNullOrEmpty(context.getMessage())){
+				JsonObject  messageJson = new JsonObject();
+				messageJson.addProperty(ERROR_MESSAGE, context.getMessage());
+				return messageJson.toString();
 			}
 			return EMPTY_RESPONSE;
 		});

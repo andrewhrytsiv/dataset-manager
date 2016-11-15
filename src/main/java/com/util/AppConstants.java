@@ -7,6 +7,7 @@ public class AppConstants {
 	public static final String PASSWORD = "password";
 	public static final String ACCESS_TOKEN = "access_token";
 	public static final String EMPTY_RESPONSE = "";
+	public static final String ERROR_MESSAGE = "error_message";
 	public static final String DATASET_URL = "dataset_url";
 	public static final String FILE_TYPE = "file_type";
 	public static final String BEARER = "Bearer ";
