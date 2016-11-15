@@ -66,7 +66,7 @@ public class AuthenticationResource extends Resource{
 					message = "Wrong password!";
 				}
 				LOGGER.error("Failed to login: " + message);
-				messageJson.addProperty("error_message", message);
+				messageJson.addProperty(ERROR_MESSAGE, message);
 				response.status(HTTP.UNAUTHORIZED);
 			}
 			return messageJson.toString();

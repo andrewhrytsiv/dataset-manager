@@ -4,6 +4,9 @@
 
     app.controller('DashboardController', function ($scope, $http, $mdDialog, $location, AuthenticationService) {
         $scope.datasets = [];
+        $scope.$on('loadDatasetsEvent', function(){
+            loadDatasets()
+        });
         loadDatasets();
 
         $scope.showDatasetLoaderDialog = function (ev) {
@@ -21,7 +24,7 @@
             });
         };
 
-         function loadDatasets(){
+        function loadDatasets(){
             $http.get('/api/protected/dashboard/datasets')
                 .success(function (response) {
                     console.log("response-->"+JSON.stringify(response));
@@ -42,7 +45,8 @@
     app.directive('uploadFileComponent', uploadFileComponent);
 
     //<File,URL loader dialog>
-    function DatasetLoaderDialog($scope, $mdDialog,$location, $http, Upload,AuthenticationService) {
+    function DatasetLoaderDialog($scope,$rootScope, $mdDialog,$location, $http, Upload,AuthenticationService) {
+
         $scope.fileTypes = [
             {label: 'xlsx', value: 'xlsx'},
             {label: 'csv', value: 'csv', isDisabled: true},
@@ -69,7 +73,8 @@
                         $mdDialog.cancel();
                     })
                     .error(function (response, status) {
-                        // showAlert(response)
+                        $mdDialog.cancel();
+                        showAlert(response);
                     });
             }else{
                 var fileToLoad = $scope.files[0];
@@ -80,7 +85,7 @@
                     progress: function (e) {
                     }
                 }).then(function (resp) {
-                    loadDatasets();
+                    $rootScope.$broadcast('loadDatasetsEvent', 'Please, load datasets!');
                     $mdDialog.cancel();
                 },function (resp) {
                     $mdDialog.cancel();
@@ -88,15 +93,27 @@
                         AuthenticationService.logout();
                         $location.path('/login');
                     }else{
-                        console.log('Error status: ' + resp.status);
+                        $mdDialog.cancel();
+                        showAlert(resp);
                     }
                 }, function (evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     // console.log('progress: ' + progressPercentage+'%');
                 });
             }
+        };
 
-
+        function showAlert(response) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#dashboard-container-id')))
+                    .clickOutsideToClose(true)
+                    .title('Uploading error:')
+                    .textContent(response.error_message)
+                    .ariaLabel('Alert Dialog Demo')
+                    .ok('OK')
+                    .targetEvent(response)
+            );
         };
     }
 
