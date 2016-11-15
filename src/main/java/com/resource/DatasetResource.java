@@ -1,11 +1,6 @@
 package com.resource;
 
-import static com.util.HTTPHelper.EMAIL;
-import static com.util.HTTPHelper.EMPTY_RESPONSE;
-import static com.util.HTTPHelper.OK_STATUS;
-import static com.util.HTTPHelper.PASSWORD;
-import static com.util.HTTPHelper.UNAUTHORIZED_STATUS;
-import static com.util.HTTPHelper.USER_NAME;
+import com.util.HTTP;
 import static spark.Spark.*;
 
 import java.util.UUID;
@@ -16,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bootstrap.Bootstrap;
 import com.entity.Dataset;
 import com.service.DatasetService;
-import static com.util.HTTPHelper.*;
+import static com.util.AppConstants.*;
 
 public class DatasetResource extends Resource{
 	
@@ -33,10 +28,10 @@ public class DatasetResource extends Resource{
 		get(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", "application/json", (request, response) -> {
 			Dataset dataset = datasetService.find(UUID.fromString(request.params(":datasetID")));
 			if(dataset != null){
-				response.status(OK_STATUS);
+				response.status(HTTP.OK);
 				return dataset.getJsonData();
 			}else{
-				response.status(NOT_FOUND);
+				response.status(HTTP.NOT_FOUND);
 			}
 			return EMPTY_RESPONSE;
 		});
@@ -44,10 +39,10 @@ public class DatasetResource extends Resource{
 		post(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", "application/json", (request, response) -> {
 			Dataset dataset = datasetService.find(UUID.fromString(request.params(":datasetID")));
 			if(dataset != null){
-				response.status(OK_STATUS);
+				response.status(HTTP.OK);
 				return dataset.getJsonData();
 			}else{
-				response.status(NOT_FOUND);
+				response.status(HTTP.NOT_FOUND);
 			}
 			return EMPTY_RESPONSE;
 		});

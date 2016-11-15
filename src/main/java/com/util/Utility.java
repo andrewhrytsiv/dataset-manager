@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.common.base.Strings;
 
 import spark.Request;
+import static com.util.AppConstants.*;
 
 public class Utility {
 	
@@ -20,7 +21,7 @@ public class Utility {
 	}
 	
 	public static Integer getUserId(Request request){
-		return (Integer) request.raw().getAttribute(HTTPHelper.USER_ID);
+		return (Integer) request.raw().getAttribute(USER_ID);
 	}
 	
 }

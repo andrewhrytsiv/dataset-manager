@@ -1,12 +1,8 @@
 package com.filter;
 
-import static com.util.HTTPHelper.BEARER;
-import static com.util.HTTPHelper.EMPTY_RESPONSE;
-import static com.util.HTTPHelper.EXPIRATION;
-import static com.util.HTTPHelper.GO_AWAY;
-import static com.util.HTTPHelper.UNAUTHORIZED_STATUS;
-import static com.util.HTTPHelper.USER_ID;
+import com.util.HTTP;
 import static spark.Spark.halt;
+import static com.util.AppConstants.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -42,7 +38,7 @@ public class ProtectedFilter implements Filter{
 			}
 		}catch(Exception e){}
 		if(!authenticated){
-			halt(UNAUTHORIZED_STATUS, GO_AWAY);
+			halt(HTTP.UNAUTHORIZED, GO_AWAY);
 		}
 	}
 

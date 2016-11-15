@@ -1,6 +1,6 @@
 package com.resource;
 
-import static com.util.HTTPHelper.*;
+import static com.util.AppConstants.*;
 import static spark.Spark.*;
 
 import java.io.InputStream;
@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import com.service.DashboardService;
 import com.service.DatasetService;
 import com.transformer.JsonTransformer;
+import com.util.HTTP;
 import com.util.Utility;
 
 public class DashboardResource extends Resource{
@@ -51,10 +52,10 @@ public class DashboardResource extends Resource{
 					.withUserId(userId)
 					.withType(request.queryParams("type"));
 			if (dashboardService.saveDatasetFromXLSXFile(file.getInputStream(), context)) {
-				response.status(OK_STATUS);
+				response.status(HTTP.OK);
 				return "some data";
 			} else {
-				response.status(INTERNAL_SERVER_ERROR);
+				response.status(HTTP.INTERNAL_SERVER_ERROR);
 			}
 			return EMPTY_RESPONSE;
 		});
@@ -72,10 +73,10 @@ public class DashboardResource extends Resource{
 					.withType(type)
 					.withUrl(url);
 			if (dashboardService.saveDatasetFromXLSXFile(fileStream, context)) {
-				response.status(OK_STATUS);
+				response.status(HTTP.OK);
 				return "some data";
 			} else {
-				response.status(INTERNAL_SERVER_ERROR);
+				response.status(HTTP.INTERNAL_SERVER_ERROR);
 			}
 			return EMPTY_RESPONSE;
 		});
