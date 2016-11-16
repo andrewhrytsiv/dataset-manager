@@ -10,13 +10,13 @@
 
                         <div>
                             <md-list flex ng-model="datasets">
-                                <md-list-item class="md-3-line"  ng-repeat="dset in datasets" ng-click="null">
+                                <md-list-item-text class="md-3-line"  ng-repeat="dset in datasets" ng-click="null">
                                     <div class="md-list-item-text" layout="column">
                                         <h3>ID: {{ dset.id }}</h3>
                                         <h3>date: {{ dset.snapshotDate }}</h3>
                                         <h3 ng-show="dset.url" >URL: {{ dset.url }}</h3>
                                     </div>
-                                </md-list-item>
+                                </md-list-item-text>
                             </md-list>
                         </div>
                     </md-content>

@@ -46,6 +46,7 @@
 
     //<File,URL loader dialog>
     function DatasetLoaderDialog($scope,$rootScope, $mdDialog,$location, $http, Upload,AuthenticationService) {
+        $scope.datasetLoading = false;
 
         $scope.fileTypes = [
             {label: 'xlsx', value: 'xlsx'},
@@ -68,16 +69,20 @@
 
         $scope.uploadDataset = function () {
             if($scope.switcher !== undefined && $scope.switcher.url){
+                $scope.datasetLoading = true;
                 $http.post('/api/protected/dashboard/urlupload',{ dataset_url : $scope.datasetUrl, file_type : $scope.fileType})
                     .success(function (response) {
+                        $scope.datasetLoading = false;
                         $mdDialog.cancel();
                     })
                     .error(function (response, status) {
+                        $scope.datasetLoading = false;
                         $mdDialog.cancel();
                         showAlert(response);
                     });
             }else{
                 var fileToLoad = $scope.files[0];
+                $scope.datasetLoading = true;
                 Upload.upload({
                     url: 'api/protected/dashboard/fileupload?type='+$scope.fileType,
                     file: fileToLoad,
@@ -85,9 +90,11 @@
                     progress: function (e) {
                     }
                 }).then(function (resp) {
+                    $scope.datasetLoading = false;
                     $rootScope.$broadcast('loadDatasetsEvent', 'Please, load datasets!');
                     $mdDialog.cancel();
                 },function (resp) {
+                    $scope.datasetLoading = false;
                     $mdDialog.cancel();
                     if(resp.status == 401){
                         AuthenticationService.logout();
