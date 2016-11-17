@@ -37,11 +37,17 @@ app.config(function ($routeProvider,$locationProvider) {
 });
 
 app.run(function($rootScope, $http, $location, $localStorage,AuthenticationService){
-    // keep user logged in after page refresh
+
     if (AuthenticationService.getCurrentUser()) {
         var user = AuthenticationService.getCurrentUser();
-        console.log(user)
-        $http.defaults.headers.common.Authorization = 'Bearer ' + user.access_token;
+        $http.post('/api/validatetocken',{ access_token : user.access_token })
+            .success(function (response) {
+                // keep user logged in after page refresh
+                $http.defaults.headers.common.Authorization = 'Bearer ' + user.access_token;
+            })
+            .error(function (response, status) {
+                AuthenticationService.logout();
+            });
     }
 
     $rootScope.$on('$routeChangeSuccess', function (event, current) {

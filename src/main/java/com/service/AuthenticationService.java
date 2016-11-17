@@ -2,6 +2,7 @@ package com.service;
 
 import java.security.Key;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -11,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dao.UserDAO;
 import com.entity.User;
+import static com.util.AppConstants.*;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import io.jsonwebtoken.Claims;
@@ -61,6 +64,21 @@ public class AuthenticationService {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean validateTocken(String jwtTocken) {
+		try {
+			if (jwtTocken != null && AuthenticationService.isTrustJWT(jwtTocken)) {
+				String data = AuthenticationService.getJWTData(jwtTocken);
+				@SuppressWarnings("unchecked")
+				Map<String, Object> attrMap = new Gson().fromJson(data, Map.class);
+				String time = (String) attrMap.get(EXPIRATION);
+				if (LocalDateTime.now().isBefore(LocalDateTime.parse(time))) {
+					return true;
+				}
+			}
+		} catch (Exception ex) {}
+		return false;
 	}
 	
 	public String generateJWT(int userId){
