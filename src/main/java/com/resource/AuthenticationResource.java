@@ -72,6 +72,17 @@ public class AuthenticationResource extends Resource{
 			return messageJson.toString();
 		});
 		
+		post(Bootstrap.API_CONTEXT + "/validatetocken", "application/json",(request, response) -> {
+			JsonObject  param = new JsonParser().parse(request.body()).getAsJsonObject();
+			String tocken = param.get(ACCESS_TOKEN).getAsString();
+			if(authService.validateTocken(tocken)){
+				response.status(HTTP.OK);
+			}else{
+				response.status(HTTP.UNAUTHORIZED);
+			}
+			return EMPTY_RESPONSE;
+		});
+		
 	}
 
 	private JsonObject getAuthenticateResponseJson(User user) {
