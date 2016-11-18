@@ -56,12 +56,15 @@ public class DashboardResource extends Resource{
 				response.status(HTTP.OK);
 			} else {
 				response.status(HTTP.INTERNAL_SERVER_ERROR);
-			}
-			if(!Strings.isNullOrEmpty(context.getMessage())){
 				JsonObject  messageJson = new JsonObject();
 				messageJson.addProperty(ERROR_MESSAGE, context.getMessage());
 				return messageJson.toString();
 			}
+//			if(!Strings.isNullOrEmpty(context.getMessage())){
+//				JsonObject  messageJson = new JsonObject();
+//				messageJson.addProperty(ERROR_MESSAGE, context.getMessage());
+//				return messageJson.toString();
+//			}
 			return EMPTY_RESPONSE;
 		});
 		
