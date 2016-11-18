@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,9 +23,13 @@ import com.dao.DatasetDAO;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
 import com.google.common.collect.Lists;
+import com.service.DatasetService;
 
 @Repository
 public class DatasetDAOSql implements DatasetDAO{
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(DatasetDAOSql.class);
+	
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
 	
@@ -77,6 +83,7 @@ public class DatasetDAOSql implements DatasetDAO{
 		  platformTransactionManager.commit(status);
 		}catch (Exception e) {
 		  platformTransactionManager.rollback(status);
+		  LOGGER.error("Transaction issue: ", e);
 		}
 	}
 	

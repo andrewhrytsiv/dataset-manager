@@ -16,6 +16,7 @@ import com.entity.MetadataKeyValue;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
+import com.util.Utility;
 
 public class DashboardService {
 	
@@ -32,6 +33,11 @@ public class DashboardService {
 				context.withMessage(message);
 			}
 			String jsonBody = parser.buildJson();
+			System.out.println(jsonBody);
+			if(!Utility.isJSONValid(jsonBody)){
+				context.withMessage("Not valid json");
+				return false;
+			}
 			Map<String,String> metadataKeyValue = parser.getFileModel().getMetaData();
 			UUID uuid = UUID.fromString(parser.getDatasetId());
 			
@@ -49,7 +55,7 @@ public class DashboardService {
 			
 			datasetService.saveDataset(dataset, metadata);
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error(e.getMessage(), e);
 			return false;
 		}finally {
 			Closeables.closeQuietly(fileInStream);
