@@ -116,7 +116,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		int valueColumn = headerRow.getLastCellNum() - 1;
 		while(rowIter.hasNext()){
 			Row row = (Row) rowIter.next();			
-			metadataModel.put(row.getCell(keyColumn).toString(), row.getCell(valueColumn).toString());
+			metadataModel.put(row.getCell(keyColumn).toString(), Objects.toString(row.getCell(valueColumn), ""));
 		}
 	}
 
