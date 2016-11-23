@@ -33,9 +33,11 @@ public class DashboardService {
 				context.withMessage(message);
 			}
 			String jsonBody = parser.buildJson();
-			System.out.println(jsonBody);
-			if(!Utility.isJSONValid(jsonBody)){
-				context.withMessage("Not valid json");
+			jsonBody = Utility.getPrettyJsonWithEscapedCharacters(jsonBody);
+			if(jsonBody == null){
+				String notValidMsg = "Not valid json";
+				context.withMessage(notValidMsg);
+				LOGGER.error(notValidMsg);
 				return false;
 			}
 			Map<String,String> metadataKeyValue = parser.getFileModel().getMetaData();
