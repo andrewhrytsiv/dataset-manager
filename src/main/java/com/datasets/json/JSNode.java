@@ -138,4 +138,11 @@ public class JSNode {
 	public static String wrap(String keyOrValue){
 		return QUOTES+keyOrValue+QUOTES;
 	}
+	
+	public static String convertDoubleQuoteToSingleIfExist(String stringWithDoubleQuote) {
+		if(stringWithDoubleQuote.contains("\"")){
+			stringWithDoubleQuote = stringWithDoubleQuote.replaceAll("\"", "'");
+		}
+		return stringWithDoubleQuote;
+	}
 }

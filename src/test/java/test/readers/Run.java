@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 public class Run {
 
 	public static void main(String[] args) throws Exception {
-		File file  = new File("C:/Users/Andrew/Desktop/wdc_lib.sparsers.wdc-xlsx/data_min.xlsx");
+		File file  = new File("G:\\workspace\\wdc\\dj\\wdc_libs\\parsers\\wdc-xlsx\\boldak_last.xlsx");
 		XLSXParser parser  = new XLSXParser();
 		String message = parser.read(file);
 		String json = parser.buildJson();
