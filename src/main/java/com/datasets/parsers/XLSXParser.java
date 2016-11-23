@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datasets.filemodels.xlsx.XLSXFileModel;
 import com.datasets.json.JSNode;
@@ -21,11 +23,14 @@ import com.datasets.query.Query;
 import com.datasets.query.RowData;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 
 public class XLSXParser extends Parser<XLSXFileModel>{
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(XLSXParser.class);
 	
 	private static final String DATASET_ID = "dataset.id";
 	private static final String DATASET_COMMIT_NOTE = "dataset.commit.note";
@@ -39,6 +44,8 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 	private static final String LAYOUT = "layout";
 	private static final String ID = "id";
 	private static final String VALUE = "value";
+	
+	private static List<String> ALL_COLUMNS = ImmutableList.of();
 	
 	public static String DATA_SHEET = "data";
 	public static String METADATA_SHEET = "metadata";
@@ -134,7 +141,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		while(rowIter.hasNext()){
 			Row row = (Row) rowIter.next();
 			for(int colIndex=start; colIndex<=end; colIndex++){
-				modelTable.put(row.getRowNum(), columIndexNameMap.get(colIndex), Objects.toString(row.getCell(colIndex), ""));
+				modelTable.put(row.getRowNum(), columIndexNameMap.get(colIndex), JSNode.convertDoubleQuoteToSingleIfExist(Objects.toString(row.getCell(colIndex), "")));
 			}
 		}
 	} 
@@ -151,7 +158,9 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		List<String> warnings = Lists.newArrayList();
 		Map<String,String> metaData = fileModel.getMetaData();
 		if(keyNotExistOrValueEmpty(metaData, DATASET_ID)){
-			throw new ParseValidationError("Cannot find metadata.dataset.id. Create and download new dataset with dataset manager'");
+			ParseValidationError error = new ParseValidationError("Cannot find metadata.dataset.id. Create and download new dataset with dataset manager'");
+			LOGGER.error(error.getMessage());
+			throw error;
 		}else{
 			datasetId = metaData.get(DATASET_ID);
 		}
@@ -173,11 +182,15 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		JSObject metadataJO = new JSObject(metaData);
 		JSNode dimensionNode = metadataJO.getNodeByPath(DIMENSION);
 		if(dimensionNode == null){
-			throw new ParseValidationError("Cannot find dataset dimension.");
+			ParseValidationError error = new ParseValidationError("Cannot find dataset dimension.");
+			LOGGER.error(error.getMessage());
+			throw error;
 		}
 		for(JSNode dimChild : dimensionNode.childNodes()){
 			if(!dimChild.getKeyValueMap().containsKey(LABEL) || dimChild.getKeyValueMap().get(LABEL).isEmpty()){
-				throw new ParseValidationError("Cannot find dimension."+ dimChild.key() +".label");
+				ParseValidationError error = new ParseValidationError("Cannot find dimension."+ dimChild.key() +".label");
+				LOGGER.error(error.getMessage());
+				throw error;
 			}
 			if(!dimChild.getKeyValueMap().containsKey(ROLE) || dimChild.getKeyValueMap().get(ROLE).isEmpty()){
 				warnings.add("Cannot find dimension."+ dimChild.key() +".role");
@@ -196,7 +209,9 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 					throw new Exception();
 				}
 			}catch(Exception ex){
-				throw new ParseValidationError("Cannot find layout."+ dimKey +".label. It must be refered to data sheet column");
+				ParseValidationError error = new ParseValidationError("Cannot find layout."+ dimKey +".label. It must be refered to data sheet column");
+				LOGGER.error(error.getMessage());
+				throw error;
 			}
 			try{
 				if(!layoutNode.getNode(dimKey).getKeyValueMap().containsKey(ID) || layoutNode.getNode(dimKey).getKeyValueMap().get(ID).isEmpty()){
@@ -208,9 +223,61 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 		}
 		
 		if(keyNotExistOrValueEmpty(layoutNode.getKeyValueMap(), VALUE)){
-			throw new ParseValidationError("Cannot find layout.value. It must be refered to data sheet column");
+			ParseValidationError error = new ParseValidationError("Cannot find layout.value. It must be refered to data sheet column");
+			LOGGER.error(error.getMessage());
+			throw error;
 		}
 		//B.A. validate hear undefined values(I do when read file)
+		Table<Integer,String,String> data = fileModel.getData();
+		for(String dimKey : dimKeyList){
+			String labelColumnName = layoutNode.getNode(dimKey).getKeyValueMap().get(LABEL);
+			String idColumnName = layoutNode.getNode(dimKey).getKeyValueMap().get(ID);
+			for(Map.Entry<Integer, Map<String, String>> row  : data.rowMap().entrySet()){
+				Integer rowIndex = row.getKey();
+				Map<String, String> rowValues = row.getValue();
+				if(Strings.isNullOrEmpty(rowValues.get(labelColumnName))){
+					ParseValidationError error = new ParseValidationError("Sheet data row "+rowIndex+" has undefined value in column '"+labelColumnName+"'");
+					LOGGER.error(error.getMessage());
+					throw error;
+				}
+				if(Strings.isNullOrEmpty(rowValues.get(idColumnName))){
+					ParseValidationError error = new ParseValidationError("Sheet data row "+rowIndex+" has undefined value in column '"+idColumnName+"'");
+					LOGGER.error(error.getMessage());
+					throw error;
+				}
+			}
+		}
+		String valueColumnName = layoutNode.getKeyValueMap().get(VALUE);
+		for(Map.Entry<Integer, Map<String, String>> row  : data.rowMap().entrySet()){
+			Integer rowIndex = row.getKey();
+			Map<String, String> rowValues = row.getValue();
+			if(Strings.isNullOrEmpty(rowValues.get(valueColumnName))){
+				warnings.add("Sheet data row "+rowIndex + " has undefined value in column '"+valueColumnName+"'");
+			}
+		}
+		Table<Integer,String,String> dictionary = fileModel.getDictionary();
+		for(Map.Entry<Integer, Map<String, String>> row  : dictionary.rowMap().entrySet()){
+			Integer rowIndex = row.getKey();
+			Map<String, String> rowValues = row.getValue();
+			if(Strings.isNullOrEmpty(rowValues.get("key"))){
+				ParseValidationError error = new ParseValidationError("Sheet 'dictionary' row " + rowIndex +" has undefined value in column 'key'");
+				LOGGER.error(error.getMessage());
+				throw error;
+			}
+			// if(!dict[i]["value.label"])
+		    //   return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'value.label'"} 
+		}
+		Table<Integer,String,String> i18n = fileModel.getI18N();
+		for(Map.Entry<Integer, Map<String, String>> row  : i18n.rowMap().entrySet()){
+			Integer rowIndex = row.getKey();
+			Map<String, String> rowValues = row.getValue();
+			if(Strings.isNullOrEmpty(rowValues.get("key"))){
+				ParseValidationError error = new ParseValidationError("Sheet 'i18n' row " + rowIndex +" has undefined value in column 'key'");
+				LOGGER.error(error.getMessage());
+				throw error;
+			}
+		}
+		
 		warnings.addAll(warningsList);
 		warningsList =  warnings;
 	}
@@ -291,7 +358,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 			}
 		}
 		.from(dataModel)
-		.map(Lists.newArrayList())
+		.map(ALL_COLUMNS)
 		.get();
 		String dictionaryJsonArrayValues = Joiner.on(",").join(result);
 		return dictionaryJsonArrayValues;
@@ -313,7 +380,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 			}
 		}
 		.from(dictionary)
-		.map(Lists.newArrayList())
+		.map(ALL_COLUMNS)
 		.get();
 		result.addAll(i18n());
 		String dictionaryJsonArrayValues = Joiner.on(",").join(result);
@@ -336,7 +403,7 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 			}
 		}
 		.from(i18n)
-		.map(Lists.newArrayList())
+		.map(ALL_COLUMNS)
 		.get();
 		return result;
 	}
