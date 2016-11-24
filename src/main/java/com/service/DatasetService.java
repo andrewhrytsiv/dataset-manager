@@ -52,4 +52,8 @@ public class DatasetService {
 		}).collect(Collectors.toList());
 		return simpleList;
 	}
+	
+	public MetadataKeyValue findMetadata(UUID datasetId){
+		return datasetDAO.findMetadata(datasetId);
+	}
 }

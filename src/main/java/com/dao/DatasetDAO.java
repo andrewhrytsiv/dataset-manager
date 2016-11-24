@@ -21,4 +21,6 @@ public interface DatasetDAO {
 
 	List<Dataset> findByUser(Integer userId);
 
+	MetadataKeyValue findMetadata(UUID datasetId);
+
 }

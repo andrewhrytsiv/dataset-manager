@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -104,6 +105,20 @@ public class DatasetDAOSql implements DatasetDAO{
 	public void update(Dataset dataset) throws DataAccessException, SQLException {
 		String sql = "UPDATE datasets SET  json_data = ?, url = ?, snapshot_date = ?, owner = ? WHERE dataset_id = ?";
 		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getUrl(), dataset.getSnapshotDate(), dataset.getOwnerId(), dataset.getUuid()});
+	}
+
+	@Override
+	public MetadataKeyValue findMetadata(UUID datasetId) {
+		String sql = "SELECT key, value FROM metadata_key_value WHERE table_name = 'datasets' AND dset_id = ?";
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, datasetId);
+		MetadataKeyValue metadata = new MetadataKeyValue();
+		metadata.setUuid(datasetId);
+		for (Map<String, Object> row : rows) {
+			String key = Objects.toString(row.get("key"), "empty_key_not_possible");
+			String value = Objects.toString(row.get("value"),"");
+			metadata.getKeyValue().put(key, value);
+		}
+		return metadata;
 	}
 
 }
