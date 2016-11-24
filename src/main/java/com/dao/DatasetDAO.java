@@ -11,9 +11,9 @@ import com.entity.MetadataKeyValue;
 
 public interface DatasetDAO {
 	
-	boolean exist(UUID datasetId);
+	boolean exist(String datasetId);
 	
-	Dataset find(UUID datasetId);
+	Dataset find(String datasetId);
 	
 	void insert(Dataset dataset,MetadataKeyValue metadata) throws DataAccessException, SQLException;
 
@@ -21,7 +21,7 @@ public interface DatasetDAO {
 
 	List<Dataset> findByUser(Integer userId);
 
-	MetadataKeyValue findMetadata(UUID datasetId);
+	MetadataKeyValue findMetadata(String datasetId);
 
 	List<MetadataKeyValue> findAllMetadata();
 

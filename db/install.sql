@@ -26,11 +26,11 @@ $$ language plpgsql;
 
 CREATE TRIGGER users_default_role_id BEFORE INSERT ON users FOR EACH ROW EXECUTE PROCEDURE default_role_id();
 
-insert into users(user_id,role_id,user_name,email,password) values(1,1,'SYSTEM','dataset.manager@gmail.com','d621c1a7169f2ca51bc8674da52e9572178a66a1dde88da24da78fe4951703f9');
+insert into users(role_id,user_name,email,password) values(1,'SYSTEM','dataset.manager@gmail.com','d621c1a7169f2ca51bc8674da52e9572178a66a1dde88da24da78fe4951703f9');
 
 create table datasets(
 	id serial,
-	dataset_id uuid,
+	dataset_id text,
 	json_data json,
 	url text,
 	personal boolean,
@@ -43,6 +43,6 @@ create table metadata_key_value(
 	id serial,
 	key text,
 	value text,
-	dset_id uuid,
+	dset_id text,
 	table_name varchar(20) 
 );

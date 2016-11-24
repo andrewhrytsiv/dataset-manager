@@ -41,7 +41,7 @@ public class DashboardService {
 				return false;
 			}
 			Map<String,String> metadataKeyValue = parser.getFileModel().getMetaData();
-			UUID uuid = UUID.fromString(parser.getDatasetId());
+			String uuid = parser.getDatasetId();
 			
 			Dataset dataset = new Dataset();
 			dataset.setUuid(uuid);

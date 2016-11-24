@@ -26,7 +26,7 @@ public class DatasetResource extends Resource{
 	
 	protected void setupEndpoints() {
 		get(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", "application/json", (request, response) -> {
-			Dataset dataset = datasetService.find(UUID.fromString(request.params(":datasetID")));
+			Dataset dataset = datasetService.find(request.params(":datasetID"));
 			if(dataset != null){
 				response.status(HTTP.OK);
 				return dataset.getJsonData();
@@ -37,7 +37,7 @@ public class DatasetResource extends Resource{
 		});
 		
 		post(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", "application/json", (request, response) -> {
-			Dataset dataset = datasetService.find(UUID.fromString(request.params(":datasetID")));
+			Dataset dataset = datasetService.find(request.params(":datasetID"));
 			if(dataset != null){
 				response.status(HTTP.OK);
 				return dataset.getJsonData();

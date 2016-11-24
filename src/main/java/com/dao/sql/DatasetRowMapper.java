@@ -13,7 +13,7 @@ public class DatasetRowMapper implements RowMapper<Dataset>{
 	@Override
 	public Dataset mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Dataset dataset = new Dataset();
-		dataset.setUuid(UUID.fromString(rs.getString("dataset_id")));
+		dataset.setUuid(rs.getString("dataset_id"));
 		dataset.setJsonData(rs.getString("json_data"));
 		dataset.setUrl(rs.getString("url"));
 		dataset.setPersonal(rs.getBoolean("personal"));
