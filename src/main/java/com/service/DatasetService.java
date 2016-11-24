@@ -55,15 +55,26 @@ public class DatasetService {
 		return simpleList;
 	}
 	
-	public List<String> findMetadata(UUID datasetId) {
-		List<String> list = Lists.newArrayList();
+	public String findMetadata(UUID datasetId) {
 		try {
 			MetadataKeyValue metadata = datasetDAO.findMetadata(datasetId);
 			JSObject jsObj = new JSObject(metadata.getKeyValue());
-//			String pretty = Utility.getPrettyJsonWithEscapedCharacters(jsObj.toString());
-			list.add(jsObj.toString());
+			return jsObj.toString();
 		} catch (Exception ex) {
 			LOGGER.error(ex.getMessage(), ex);
+		}
+		return null;
+	}
+	public List<String> findAllMetadata() {
+		List<String> list = Lists.newArrayList();
+		List<MetadataKeyValue> metadataList = datasetDAO.findAllMetadata();
+		for(MetadataKeyValue metadata : metadataList){
+			try{
+				String jsonMetadata = new JSObject(metadata.getKeyValue()).toString();
+				list.add(jsonMetadata);
+			}catch(Exception ex){
+				LOGGER.error(ex.getMessage());
+			}
 		}
 		return list;
 	}

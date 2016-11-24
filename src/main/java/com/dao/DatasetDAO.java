@@ -23,4 +23,6 @@ public interface DatasetDAO {
 
 	MetadataKeyValue findMetadata(UUID datasetId);
 
+	List<MetadataKeyValue> findAllMetadata();
+
 }
