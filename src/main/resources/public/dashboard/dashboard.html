@@ -7,10 +7,10 @@
                         <md-button class="md-primary md-raised" ng-click="showDatasetLoaderDialog($event)">
                             Upload dataset
                         </md-button>
-                        <label>Filter: <input ng-model="searchText"></label>
+                        <label>Filter: <input ng-model="searchDatasetText"></label>
                         <div>
                             <md-list flex ng-model="datasets">
-                                <md-list-item-text class="md-3-line"  ng-repeat="dset in datasets | filter:searchText" ng-click="null">
+                                <md-list-item-text class="md-3-line"  ng-repeat="dset in datasets | filter:searchDatasetText" ng-click="null">
                                     <div class="md-list-item-text" layout="column">
                                         <p>ID: {{ dset.id }}</p>
                                         <p>date: {{ dset.snapshotDate }}</p>
@@ -23,12 +23,14 @@
                 </md-tab>
                 <md-tab label="datasets metadata">
                     <md-content class="md-padding">
+                        <button type="button" class="btn btn-success" ng-click="loadMetadataForDatasets()">Refresh</button>
+                        <label style="margin-left: 50px">Search: <input ng-model="searchMetadataText"></label>
                         <div>
                             <md-list flex ng-model="metadataList">
-                                <md-list-item-text class="md-3-line"  ng-repeat="mdata in metadataList" ng-click="null">
-                                    <div class="md-list-item-text" layout="column">
-                                        <h4>ID : {{mdata.dataset.id}}</h4>
-                                        <pre ng-bind-html="mdata | prettify">
+                                <md-list-item-text class="md-3-line"  ng-repeat="mdata in metadataList | filter:searchMetadataText" ng-click="null">
+                                    <div class="md-list-item-text" layout="column" ng-dblclick="showDetails = ! showDetails">
+                                        <p>ID : {{mdata.dataset.id}}</p>
+                                        <pre ng-bind-html="mdata | prettify" ng-show="showDetails">
                                              {mdata | json}}
                                         </pre>
                                     </div>

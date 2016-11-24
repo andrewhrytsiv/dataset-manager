@@ -9,6 +9,7 @@
         $scope.$on('loadDatasetsEvent', function(){
             loadDatasets()
         });
+        $scope.loadMetadataForDatasets = loadMetadataForDatasets;
         loadDatasets();
         loadMetadataForDatasets();
 
@@ -30,7 +31,6 @@
         function loadDatasets(){
             $http.get('/api/protected/dashboard/datasets')
                 .success(function (response) {
-                    console.log("response-->"+JSON.stringify(response));
                     $scope.datasets =  response;
                 })
                 .error(function (response, status) {
@@ -45,6 +45,7 @@
         };
 
         function loadMetadataForDatasets(){
+            $scope.metadataList = [];
             $http.get('/api/protected/dashboard/metadatafordatasets')
                 .success(function (response) {
                     $scope.metadataList =  response;
