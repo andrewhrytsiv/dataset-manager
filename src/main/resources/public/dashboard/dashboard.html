@@ -23,8 +23,18 @@
                 </md-tab>
                 <md-tab label="datasets metadata">
                     <md-content class="md-padding">
-                        <h1 class="md-display-2">Tab Two</h1>
-                       <h1>Some contant!</h1>
+                        <div>
+                            <md-list flex ng-model="metadataList">
+                                <md-list-item-text class="md-3-line"  ng-repeat="mdata in metadataList" ng-click="null">
+                                    <div class="md-list-item-text" layout="column">
+                                        <h4>ID : {{mdata.dataset.id}}</h4>
+                                        <pre ng-bind-html="mdata | prettify">
+                                             {mdata | json}}
+                                        </pre>
+                                    </div>
+                                </md-list-item-text>
+                            </md-list>
+                        </div>
                     </md-content>
                 </md-tab>
             </md-tabs>

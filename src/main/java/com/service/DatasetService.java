@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dao.DatasetDAO;
+import com.datasets.json.JSObject;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
-import com.entity.SimpleDatasetRender;
+import com.entity.render.SimpleDatasetJsonRender;
+import com.google.common.collect.Lists;
 import com.util.Utility;
 
 public class DatasetService {
@@ -41,9 +43,9 @@ public class DatasetService {
 		
 	}
 
-	public List<SimpleDatasetRender> findByUser(Integer userId) {
-		List<SimpleDatasetRender> simpleList = datasetDAO.findByUser(userId).stream().map(dataset -> {
-			SimpleDatasetRender dset = new SimpleDatasetRender();
+	public List<SimpleDatasetJsonRender> findByUser(Integer userId) {
+		List<SimpleDatasetJsonRender> simpleList = datasetDAO.findByUser(userId).stream().map(dataset -> {
+			SimpleDatasetJsonRender dset = new SimpleDatasetJsonRender();
 			dset.setId(dataset.getUuid().toString());
 			dset.setUrl(dataset.getUrl());
 			dset.setPersonal(dataset.isPersonal());
@@ -53,7 +55,16 @@ public class DatasetService {
 		return simpleList;
 	}
 	
-	public MetadataKeyValue findMetadata(UUID datasetId){
-		return datasetDAO.findMetadata(datasetId);
+	public List<String> findMetadata(UUID datasetId) {
+		List<String> list = Lists.newArrayList();
+		try {
+			MetadataKeyValue metadata = datasetDAO.findMetadata(datasetId);
+			JSObject jsObj = new JSObject(metadata.getKeyValue());
+//			String pretty = Utility.getPrettyJsonWithEscapedCharacters(jsObj.toString());
+			list.add(jsObj.toString());
+		} catch (Exception ex) {
+			LOGGER.error(ex.getMessage(), ex);
+		}
+		return list;
 	}
 }

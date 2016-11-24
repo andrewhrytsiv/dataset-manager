@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.bootstrap.Bootstrap.*;
 
+import com.entity.MetadataKeyValue;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -95,8 +97,10 @@ public class DashboardResource extends Resource{
 		});
 		
 		get(API_CONTEXT + "/protected/dashboard/metadatafordatasets", "application/json", (request, response) -> {
-			
-			return EMPTY_RESPONSE;
+			List<String> metadataList = datasetService.findMetadata(UUID.fromString("c2c43210-a7f6-11e6-98ed-a583ee6cec64"));
+			response.status(HTTP.OK);
+			String jsonArray = "[" + Joiner.on(",").join(metadataList) + "]";
+			return jsonArray;
 		});
 		
 	}
