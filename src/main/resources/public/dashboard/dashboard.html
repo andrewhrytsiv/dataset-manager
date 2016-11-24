@@ -7,10 +7,10 @@
                         <md-button class="md-primary md-raised" ng-click="showDatasetLoaderDialog($event)">
                             Upload dataset
                         </md-button>
-
+                        <label>Filter: <input ng-model="searchText"></label>
                         <div>
                             <md-list flex ng-model="datasets">
-                                <md-list-item-text class="md-3-line"  ng-repeat="dset in datasets" ng-click="null">
+                                <md-list-item-text class="md-3-line"  ng-repeat="dset in datasets | filter:searchText" ng-click="null">
                                     <div class="md-list-item-text" layout="column">
                                         <p>ID: {{ dset.id }}</p>
                                         <p>date: {{ dset.snapshotDate }}</p>
@@ -21,7 +21,7 @@
                         </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="scheduled datasets">
+                <md-tab label="datasets metadata">
                     <md-content class="md-padding">
                         <h1 class="md-display-2">Tab Two</h1>
                        <h1>Some contant!</h1>

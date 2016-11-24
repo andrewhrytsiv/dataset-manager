@@ -6,6 +6,7 @@ import static spark.Spark.*;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
@@ -90,6 +91,11 @@ public class DashboardResource extends Resource{
 				messageJson.addProperty(ERROR_MESSAGE, context.getMessage());
 				return messageJson.toString();
 			}
+			return EMPTY_RESPONSE;
+		});
+		
+		get(API_CONTEXT + "/protected/dashboard/metadatafordatasets", "application/json", (request, response) -> {
+			
 			return EMPTY_RESPONSE;
 		});
 		
