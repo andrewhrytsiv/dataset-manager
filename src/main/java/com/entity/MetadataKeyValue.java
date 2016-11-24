@@ -7,14 +7,14 @@ import com.google.common.collect.Maps;
 
 public class MetadataKeyValue {
 	
-	private UUID uuid;
+	private String uuid;
 	private String table;
 	private Map<String,String> keyValue = Maps.newHashMap();
 	
-	public UUID getUuid() {
+	public String getUuid() {
 		return uuid;
 	}
-	public void setUuid(UUID uuid) {
+	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 	public String getTable() {

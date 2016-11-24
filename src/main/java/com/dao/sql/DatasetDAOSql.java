@@ -45,7 +45,7 @@ public class DatasetDAOSql implements DatasetDAO{
     }
 
 	@Override
-	public Dataset find(UUID datasetId) {
+	public Dataset find(String datasetId) {
 		String sql = "SELECT * FROM datasets WHERE dataset_id = ? ";
 		Dataset dataset = (Dataset)jdbcTemplate.queryForObject(sql, new Object[] {datasetId}, new DatasetRowMapper());
 		return dataset;
@@ -58,7 +58,7 @@ public class DatasetDAOSql implements DatasetDAO{
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 		for (Map<String, Object> row : rows) {
 			Dataset dataset = new Dataset();
-			dataset.setUuid((UUID)(row.get("dataset_id")));
+			dataset.setUuid((String)(row.get("dataset_id")));
 			dataset.setUrl((String)row.get("url"));
 			dataset.setPersonal((Boolean)row.get("personal"));
 			Timestamp date = (Timestamp)row.get("snapshot_date");
@@ -69,7 +69,7 @@ public class DatasetDAOSql implements DatasetDAO{
 	}
 
 	@Override
-	public boolean exist(UUID datasetId) {
+	public boolean exist(String datasetId) {
 		String sql = "SELECT COUNT(dataset_id) FROM datasets WHERE dataset_id = ?";
 		Integer count = (Integer) jdbcTemplate.queryForObject(sql, new Object[] { datasetId }, Integer.class);
 		return count > 0 ? true : false;
@@ -109,7 +109,7 @@ public class DatasetDAOSql implements DatasetDAO{
 	}
 
 	@Override
-	public MetadataKeyValue findMetadata(UUID datasetId) {
+	public MetadataKeyValue findMetadata(String datasetId) {
 		String sql = "SELECT key, value FROM metadata_key_value WHERE table_name = 'datasets' AND dset_id = ?";
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, datasetId);
 		MetadataKeyValue metadata = new MetadataKeyValue();
@@ -125,10 +125,10 @@ public class DatasetDAOSql implements DatasetDAO{
 	@Override
 	public List<MetadataKeyValue> findAllMetadata() {
 		String sql = "SELECT dset_id, key, value FROM metadata_key_value WHERE table_name = 'datasets' ORDER BY dset_id";
-		Map<UUID, MetadataKeyValue> resultMap = Maps.newLinkedHashMap();
+		Map<String, MetadataKeyValue> resultMap = Maps.newLinkedHashMap();
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 		for (Map<String, Object> row : rows) {
-			UUID datasetId = (UUID) row.get("dset_id");
+			String datasetId = (String) row.get("dset_id");
 			String key = (String) row.get("key");
 			String value = (String) row.get("value");
 			if(resultMap.containsKey(datasetId)){

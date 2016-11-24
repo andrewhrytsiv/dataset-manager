@@ -24,7 +24,7 @@ public class DatasetService {
 	@Autowired
 	private DatasetDAO datasetDAO;
 	
-	public Dataset find(UUID datasetId){
+	public Dataset find(String datasetId){
 		return datasetDAO.find(datasetId);
 	}
 	
@@ -55,7 +55,7 @@ public class DatasetService {
 		return simpleList;
 	}
 	
-	public String findMetadata(UUID datasetId) {
+	public String findMetadata(String datasetId) {
 		try {
 			MetadataKeyValue metadata = datasetDAO.findMetadata(datasetId);
 			JSObject jsObj = new JSObject(metadata.getKeyValue());
