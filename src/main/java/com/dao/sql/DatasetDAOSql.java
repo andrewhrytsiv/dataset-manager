@@ -24,6 +24,7 @@ import com.dao.DatasetDAO;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.service.DatasetService;
 
 @Repository
@@ -114,11 +115,33 @@ public class DatasetDAOSql implements DatasetDAO{
 		MetadataKeyValue metadata = new MetadataKeyValue();
 		metadata.setUuid(datasetId);
 		for (Map<String, Object> row : rows) {
-			String key = Objects.toString(row.get("key"), "empty_key_not_possible");
-			String value = Objects.toString(row.get("value"),"");
+			String key = (String) row.get("key");
+			String value = (String) row.get("value");
 			metadata.getKeyValue().put(key, value);
 		}
 		return metadata;
+	}
+
+	@Override
+	public List<MetadataKeyValue> findAllMetadata() {
+		String sql = "SELECT dset_id, key, value FROM metadata_key_value WHERE table_name = 'datasets' ORDER BY dset_id";
+		Map<UUID, MetadataKeyValue> resultMap = Maps.newLinkedHashMap();
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+		for (Map<String, Object> row : rows) {
+			UUID datasetId = (UUID) row.get("dset_id");
+			String key = (String) row.get("key");
+			String value = (String) row.get("value");
+			if(resultMap.containsKey(datasetId)){
+				MetadataKeyValue metadata = resultMap.get(datasetId);
+				metadata.getKeyValue().put(key, value);
+			}else{
+				MetadataKeyValue metadata = new MetadataKeyValue();
+				metadata.setUuid(datasetId);
+				metadata.getKeyValue().put(key, value);
+				resultMap.put(datasetId, metadata);
+			}
+		}
+		return Lists.newArrayList(resultMap.values());
 	}
 
 }

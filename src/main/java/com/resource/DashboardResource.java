@@ -97,10 +97,10 @@ public class DashboardResource extends Resource{
 		});
 		
 		get(API_CONTEXT + "/protected/dashboard/metadatafordatasets", "application/json", (request, response) -> {
-			List<String> metadataList = datasetService.findMetadata(UUID.fromString("c2c43210-a7f6-11e6-98ed-a583ee6cec64"));
+			List<String> metadataList = datasetService.findAllMetadata();
 			response.status(HTTP.OK);
 			String jsonArray = "[" + Joiner.on(",").join(metadataList) + "]";
-			return jsonArray;
+			return metadataList.isEmpty() ? EMPTY_RESPONSE : jsonArray;
 		});
 		
 	}
