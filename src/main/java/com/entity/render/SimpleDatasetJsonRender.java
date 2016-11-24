@@ -1,6 +1,6 @@
-package com.entity;
+package com.entity.render;
 
-public class SimpleDatasetRender {
+public class SimpleDatasetJsonRender {
 	private String id;
 	private String url;
 	private Boolean personal;

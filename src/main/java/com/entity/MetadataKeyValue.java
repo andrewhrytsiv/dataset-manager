@@ -3,11 +3,13 @@ package com.entity;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Maps;
+
 public class MetadataKeyValue {
 	
 	private UUID uuid;
 	private String table;
-	private Map<String,String> keyValue;
+	private Map<String,String> keyValue = Maps.newHashMap();
 	
 	public UUID getUuid() {
 		return uuid;
