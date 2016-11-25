@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +23,28 @@ public class DashboardService {
 	
 	@Autowired
 	private DatasetService datasetService;
+	
+	public boolean saveJsonFile(String jsonFile, Context context){
+		boolean saved = false;
+		switch (context.getType()) {
+		case "json_datasets":
+			saved = saveDatasetsFromJsonFile(jsonFile, context);
+			break;
+		case "json_dictionaty":
+			saved = saveDictionaryFromJsonFile(jsonFile, context);
+			break;
+		}
+		
+		return saved;
+	}
+	
+	public boolean saveDatasetsFromJsonFile(String jsonFile, Context context){
+		return true;
+	}
+	
+	public boolean saveDictionaryFromJsonFile(String jsonFile, Context context){
+		return true;
+	}
 	
 	public boolean saveDatasetFromXLSXFile(InputStream fileInStream, Context context){
 		XLSXParser parser = new XLSXParser();
@@ -64,6 +85,7 @@ public class DashboardService {
 		}
 		return true;
 	}
+	
 	public static Context newContext(){
 		return new Context();
 	}
