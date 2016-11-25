@@ -39,7 +39,7 @@
                         AuthenticationService.logout();
                         $location.path('/login');
                     }else{
-                        console.log('Error status: ' + resp.status);
+                        console.log('Error status: ' + response.status);
                     }
                 });
         };
@@ -56,7 +56,7 @@
                         AuthenticationService.logout();
                         $location.path('/login');
                     }else{
-                        console.log('Error status: ' + resp.status);
+                        console.log('Error status: ' + response.status);
                     }
                 });
         };
@@ -95,6 +95,8 @@
 
         $scope.fileTypes = [
             {label: 'xlsx', value: 'xlsx'},
+            {label: 'json(datasets)', value: 'json_datasets'},
+            {label: 'json(dictionary)', value: 'json_dictionary'},
             {label: 'csv', value: 'csv', isDisabled: true},
             {label: 'html', value: 'html', isDisabled: true}
         ];
@@ -127,31 +129,59 @@
                     });
             }else{
                 var fileToLoad = $scope.files[0];
-                $scope.datasetLoading = true;
-                Upload.upload({
-                    url: 'api/protected/dashboard/fileupload?type='+$scope.fileType,
-                    file: fileToLoad,
-                    // data: { file: fileToLoad,'type':$scope.fileType},
-                    progress: function (e) {
-                    }
-                }).then(function (resp) {
-                    $scope.datasetLoading = false;
-                    $rootScope.$broadcast('loadDatasetsEvent', 'Please, load datasets!');
-                    $mdDialog.cancel();
-                },function (resp) {
-                    $scope.datasetLoading = false;
-                    $mdDialog.cancel();
-                    if(resp.status == 401){
-                        AuthenticationService.logout();
-                        $location.path('/login');
-                    }else{
-                        $mdDialog.cancel();
-                        showAlert(resp);
-                    }
-                }, function (evt) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    // console.log('progress: ' + progressPercentage+'%');
-                });
+                switch ($scope.fileType) {
+                    case "xlsx":
+                        $scope.datasetLoading = true;
+                        Upload.upload({
+                            url: 'api/protected/dashboard/fileupload?type='+$scope.fileType,
+                            file: fileToLoad,
+                            progress: function (e) {
+                            }
+                        }).then(function (resp) {
+                            $scope.datasetLoading = false;
+                            $rootScope.$broadcast('loadDatasetsEvent', 'Please, load datasets!');
+                            $mdDialog.cancel();
+                        },function (resp) {
+                            $scope.datasetLoading = false;
+                            $mdDialog.cancel();
+                            if(resp.status == 401){
+                                AuthenticationService.logout();
+                                $location.path('/login');
+                            }else{
+                                $mdDialog.cancel();
+                                showAlert(resp);
+                            }
+                        }, function (evt) {
+                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                            // console.log('progress: ' + progressPercentage+'%');
+                        });
+                        break;
+                    case "json_datasets":
+                    case "json_dictionary":
+                        $scope.datasetLoading = true;
+                        var reader = new FileReader();
+                        reader.onload = (function (theFile) {
+                            return function (e) {
+                                try {
+                                    var json = JSON.parse(e.target.result);
+                                    $http.post('/api/protected/dashboard/jsonfile?type='+$scope.fileType, JSON.stringify(json))
+                                        .success(function (response) {
+                                            $scope.datasetLoading = false;
+                                            $mdDialog.cancel();
+                                        })
+                                        .error(function (response, status) {
+                                            $scope.datasetLoading = false;
+                                            $mdDialog.cancel();
+                                            showAlert(response);
+                                        });
+                                } catch (ex) {
+                                    alert('Error when trying to parse json = ' + ex);
+                                }
+                            }
+                        })(fileToLoad);
+                        reader.readAsText(fileToLoad);
+                        break;
+                }
             }
         };
 

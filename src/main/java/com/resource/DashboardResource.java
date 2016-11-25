@@ -3,10 +3,11 @@ package com.resource;
 import static com.util.AppConstants.*;
 import static spark.Spark.*;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
@@ -17,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.bootstrap.Bootstrap.*;
 
-import com.entity.MetadataKeyValue;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.io.Files;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.DashboardService;
@@ -68,6 +69,16 @@ public class DashboardResource extends Resource{
 //				messageJson.addProperty(ERROR_MESSAGE, context.getMessage());
 //				return messageJson.toString();
 //			}
+			return EMPTY_RESPONSE;
+		});
+		
+		post(API_CONTEXT + "/protected/dashboard/jsonfile", (request, response) -> {			
+			try{
+				Files.write(request.body(), new File("G:/TEST_JSON.json"), Charset.forName("UTF-8"));
+				System.out.println("check file");
+			}catch(Exception ex){
+				LOGGER.error(ex.getMessage(),ex);
+			}
 			return EMPTY_RESPONSE;
 		});
 		
