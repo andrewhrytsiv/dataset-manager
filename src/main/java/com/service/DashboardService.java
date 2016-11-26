@@ -1,7 +1,9 @@
 package com.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -12,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.datasets.parsers.XLSXParser;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
+import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
+import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
 import com.util.Utility;
 
@@ -24,25 +28,34 @@ public class DashboardService {
 	@Autowired
 	private DatasetService datasetService;
 	
-	public boolean saveJsonFile(String jsonFile, Context context){
+	public boolean saveDatasetFromFile(InputStream fileStream, Context context){
 		boolean saved = false;
 		switch (context.getType()) {
+		case "xlsx":
+			saveDatasetFromXLSXFile(fileStream, context);
+			break;
 		case "json_datasets":
-			saved = saveDatasetsFromJsonFile(jsonFile, context);
+			saved = saveDatasetsFromJsonFile(fileStream, context);
 			break;
 		case "json_dictionaty":
-			saved = saveDictionaryFromJsonFile(jsonFile, context);
+			saved = saveDictionaryFromJsonFile(fileStream, context);
 			break;
 		}
 		
 		return saved;
 	}
 	
-	public boolean saveDatasetsFromJsonFile(String jsonFile, Context context){
+	public boolean saveDatasetsFromJsonFile(InputStream fileStream, Context context){
+		try {
+			String json = CharStreams.toString(new InputStreamReader(fileStream, Charsets.UTF_8));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 	}
 	
-	public boolean saveDictionaryFromJsonFile(String jsonFile, Context context){
+	public boolean saveDictionaryFromJsonFile(InputStream fileStream, Context context){
 		return true;
 	}
 	

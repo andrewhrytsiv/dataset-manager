@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.datasets.filemodels.xlsx.XLSXFileModel;
 import com.datasets.parsers.XLSXParser;
 import com.datasets.query.RowData;
 import com.google.common.io.Files;
