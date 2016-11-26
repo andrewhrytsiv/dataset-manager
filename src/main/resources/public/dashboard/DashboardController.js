@@ -131,6 +131,7 @@
                 var fileToLoad = $scope.files[0];
                 switch ($scope.fileType) {
                     case "xlsx":
+                    case "json_datasets":
                         $scope.datasetLoading = true;
                         Upload.upload({
                             url: 'api/protected/dashboard/fileupload?type='+$scope.fileType,
@@ -156,7 +157,6 @@
                             // console.log('progress: ' + progressPercentage+'%');
                         });
                         break;
-                    case "json_datasets":
                     case "json_dictionary":
                         $scope.datasetLoading = true;
                         var reader = new FileReader();

@@ -16,7 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datasets.filemodels.xlsx.XLSXFileModel;
+import com.datasets.filemodels.XLSXFileModel;
 import com.datasets.json.JSNode;
 import com.datasets.json.JSObject;
 import com.datasets.query.Query;

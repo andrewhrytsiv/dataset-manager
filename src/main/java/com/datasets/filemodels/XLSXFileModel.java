@@ -1,8 +1,7 @@
-package com.datasets.filemodels.xlsx;
+package com.datasets.filemodels;
 
 import java.util.Map;
 
-import com.datasets.filemodels.DatasetFileModel;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
