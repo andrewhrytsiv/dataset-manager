@@ -54,16 +54,20 @@ public class DatasetDAOSql implements DatasetDAO{
 	@Override
 	public List<Dataset> findByUser(Integer userId) {
 		List<Dataset> datasetList = Lists.newArrayList();
-		String sql = "SELECT dataset_id, url, personal,snapshot_date FROM datasets ORDER BY snapshot_date DESC";
-		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
-		for (Map<String, Object> row : rows) {
-			Dataset dataset = new Dataset();
-			dataset.setUuid((String)(row.get("dataset_id")));
-			dataset.setUrl((String)row.get("url"));
-			dataset.setPersonal((Boolean)row.get("personal"));
-			Timestamp date = (Timestamp)row.get("snapshot_date");
-			dataset.setSnapshotDate(date.toLocalDateTime());
-			datasetList.add(dataset);
+		try{
+			String sql = "SELECT dataset_id, url, personal,snapshot_date FROM datasets ORDER BY snapshot_date DESC";
+			List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+			for (Map<String, Object> row : rows) {
+				Dataset dataset = new Dataset();
+				dataset.setUuid((String)(row.get("dataset_id")));
+				dataset.setUrl((String)row.get("url"));
+				dataset.setPersonal((Boolean)row.get("personal"));
+				Timestamp date = (Timestamp)row.get("snapshot_date");
+				dataset.setSnapshotDate(date.toLocalDateTime());
+				datasetList.add(dataset);
+			}
+		}catch(Exception ex){
+			LOGGER.error("findByUser retrive failed : "+ex.getMessage(), ex);
 		}
 		return datasetList;
 	}

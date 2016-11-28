@@ -1,11 +1,13 @@
 package test.readers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.datasets.parsers.JSONParser;
 import com.datasets.parsers.XLSXParser;
 import com.datasets.query.RowData;
 import com.google.common.io.Files;
@@ -18,13 +20,10 @@ import com.google.gson.JsonParser;
 public class Run {
 
 	public static void main(String[] args) throws Exception {
-//		File file  = new File("C:\\Users\\Andrew\\Downloads\\1f9aac20-8e35-11e6-9d7b-0d2802a5672e_2016_10(undefined).xlsx");
-//		XLSXParser parser  = new XLSXParser();
-//		String message = parser.read(file);
-//		String json = parser.buildJson();
-		String json = "{\"value\":\"My text with 'name' my!\"}";
-		System.out.println(getPrettyJsonWithEscapedCharacters(json));
-        
+		File file  = new File("C:\\Users\\Andrew\\Downloads\\dj-dps.herokuapp.com_export_Dataset_2016_11_23_11_23_27.json");
+		JSONParser parser  = new JSONParser();
+		parser.read(new FileInputStream(file));
+		parser.parseDatasets();
 	}
 	
 	
