@@ -30,7 +30,7 @@ insert into users(role_id,user_name,email,password) values(1,'SYSTEM','dataset.m
 
 create table datasets(
 	id serial,
-	dataset_id text,
+	dataset_id text NOT NULL,
 	json_data json,
 	url text,
 	personal boolean,
@@ -43,6 +43,6 @@ create table metadata_key_value(
 	id serial,
 	key text,
 	value text,
-	dset_id text,
-	table_name varchar(20) 
+	dset_id text NOT NULL,
+	table_name varchar(20) NOT NULL
 );
