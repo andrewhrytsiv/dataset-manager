@@ -11,9 +11,9 @@
                         <div>
                             <md-list flex ng-model="datasets">
                                 <md-list-item-text class="md-3-line"  ng-repeat="dset in datasets | filter:searchDatasetText" ng-click="null">
-                                    <div class="md-list-item-text" layout="column">
+                                    <div class="md-list-item-text border-padding" layout="column">
                                         <p>ID: {{ dset.id }}</p>
-                                        <p>date: {{ dset.snapshotDate }}</p>
+                                        <p>Last modified: {{ dset.snapshotDate }}</p>
                                         <p ng-show="dset.url">URL: {{ dset.url }}</p>
                                     </div>
                                 </md-list-item-text>
@@ -28,7 +28,7 @@
                         <div>
                             <md-list flex ng-model="metadataList">
                                 <md-list-item-text class="md-3-line"  ng-repeat="mdata in metadataList | filter:searchMetadataText" ng-click="null">
-                                    <div class="md-list-item-text" layout="column" ng-dblclick="showDetails = ! showDetails">
+                                    <div class="md-list-item-text border-padding" layout="column" ng-dblclick="showDetails = ! showDetails">
                                         <p>ID : {{mdata.dataset.id}}</p>
                                         <pre ng-bind-html="mdata | prettify" ng-show="showDetails">
                                              {mdata | json}}

@@ -23,3 +23,8 @@ pre {
 .key {
     color: red;
 }
+
+.border-padding{
+    padding-top: 5px;
+    padding-left: 15px;
+}
