@@ -1,9 +1,9 @@
 package com.resource;
 
 import com.util.HTTP;
-import static spark.Spark.*;
+import com.util.MediaType;
 
-import java.util.UUID;
+import static spark.Spark.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class DatasetResource extends Resource{
 	}
 	
 	protected void setupEndpoints() {
-		get(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", "application/json", (request, response) -> {
+		get(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", MediaType.APPLICATION_JSON, (request, response) -> {
 			Dataset dataset = datasetService.find(request.params(":datasetID"));
 			if(dataset != null){
 				response.status(HTTP.OK);
@@ -36,7 +36,7 @@ public class DatasetResource extends Resource{
 			return EMPTY_RESPONSE;
 		});
 		
-		post(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", "application/json", (request, response) -> {
+		post(Bootstrap.API_CONTEXT + "/dataset/get/:datasetID", MediaType.APPLICATION_JSON, (request, response) -> {
 			Dataset dataset = datasetService.find(request.params(":datasetID"));
 			if(dataset != null){
 				response.status(HTTP.OK);

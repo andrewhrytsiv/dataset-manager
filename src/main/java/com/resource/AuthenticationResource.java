@@ -15,6 +15,7 @@ import com.service.AuthenticationService;
 import static com.util.AppConstants.*;
 
 import com.util.HTTP;
+import com.util.MediaType;
 import com.util.Utility;
 
 public class AuthenticationResource extends Resource{
@@ -30,7 +31,7 @@ public class AuthenticationResource extends Resource{
 
 	protected void setupEndpoints() {
 		
-		post(Bootstrap.API_CONTEXT + "/register", "application/json", (request, response) -> {
+		post(Bootstrap.API_CONTEXT + "/register", MediaType.APPLICATION_JSON, (request, response) -> {
 			JsonObject  userObject = new JsonParser().parse(request.body()).getAsJsonObject();
 			String email = userObject.get(EMAIL).getAsString();
 			String username = userObject.get(USER_NAME).getAsString();
@@ -47,7 +48,7 @@ public class AuthenticationResource extends Resource{
             return EMPTY_RESPONSE;
         });
 		
-		post(Bootstrap.API_CONTEXT + "/login", "application/json",(request, response) -> {
+		post(Bootstrap.API_CONTEXT + "/login", MediaType.APPLICATION_JSON,(request, response) -> {
 			JsonObject  userObject = new JsonParser().parse(request.body()).getAsJsonObject();
 			JsonObject  messageJson = new JsonObject();
 			String email = userObject.get(EMAIL).getAsString();
@@ -72,7 +73,7 @@ public class AuthenticationResource extends Resource{
 			return messageJson.toString();
 		});
 		
-		post(Bootstrap.API_CONTEXT + "/validatetocken", "application/json",(request, response) -> {
+		post(Bootstrap.API_CONTEXT + "/validatetocken", MediaType.APPLICATION_JSON,(request, response) -> {
 			JsonObject  param = new JsonParser().parse(request.body()).getAsJsonObject();
 			String tocken = param.get(ACCESS_TOKEN).getAsString();
 			if(authService.validateTocken(tocken)){

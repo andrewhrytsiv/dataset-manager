@@ -3,10 +3,8 @@ package com.resource;
 import static com.util.AppConstants.*;
 import static spark.Spark.*;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.servlet.MultipartConfigElement;
@@ -20,13 +18,13 @@ import static com.bootstrap.Bootstrap.*;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.google.common.io.Files;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.DashboardService;
 import com.service.DatasetService;
 import com.transformer.JsonTransformer;
 import com.util.HTTP;
+import com.util.MediaType;
 import com.util.Utility;
 
 public class DashboardResource extends Resource{
@@ -44,7 +42,7 @@ public class DashboardResource extends Resource{
 
 	protected void setupEndpoints() {
 		
-		get(API_CONTEXT + "/protected/dashboard/datasets", "application/json",
+		get(API_CONTEXT + "/protected/dashboard/datasets", MediaType.APPLICATION_JSON,
 				(request, response) -> datasetService.findByUser(Utility.getUserId(request)),
 				new JsonTransformer());
 		
@@ -67,17 +65,7 @@ public class DashboardResource extends Resource{
 			return EMPTY_RESPONSE;
 		});
 		
-		post(API_CONTEXT + "/protected/dashboard/jsonfile", (request, response) -> {			
-			try{
-				Files.write(request.body(), new File("G:/TEST_JSON.json"), Charset.forName("UTF-8"));
-				System.out.println("check file");
-			}catch(Exception ex){
-				LOGGER.error(ex.getMessage(),ex);
-			}
-			return EMPTY_RESPONSE;
-		});
-		
-		post(API_CONTEXT + "/protected/dashboard/urlupload", "application/json", (request, response) -> {
+		post(API_CONTEXT + "/protected/dashboard/urlupload", MediaType.APPLICATION_JSON, (request, response) -> {
 			JsonObject info = new JsonParser().parse(request.body()).getAsJsonObject();
 			String url = info.get(DATASET_URL).getAsString();
 			String type = info.get(FILE_TYPE).getAsString();
@@ -102,7 +90,7 @@ public class DashboardResource extends Resource{
 			return EMPTY_RESPONSE;
 		});
 		
-		get(API_CONTEXT + "/protected/dashboard/metadatafordatasets", "application/json", (request, response) -> {
+		get(API_CONTEXT + "/protected/dashboard/metadatafordatasets", MediaType.APPLICATION_JSON, (request, response) -> {
 			List<String> metadataList = datasetService.findAllMetadata();
 			response.status(HTTP.OK);
 			String jsonArray = "[" + Joiner.on(",").join(metadataList) + "]";
