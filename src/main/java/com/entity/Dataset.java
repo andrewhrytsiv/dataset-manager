@@ -2,7 +2,6 @@ package com.entity;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.postgresql.util.PGobject;
 
