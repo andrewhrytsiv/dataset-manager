@@ -7,7 +7,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 
-public class XLSXFileModel implements DatasetFileModel{
+public class XLSXFileModel {
 	
 	private Map<String,String> metadataModel = Maps.newLinkedHashMap();
 	private Table<Integer,String,String> dataModel =  HashBasedTable.create();

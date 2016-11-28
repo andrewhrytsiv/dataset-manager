@@ -1,13 +1,21 @@
 package com.service;
 
+import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import com.dao.DatasetDAO;
 import com.datasets.json.JSObject;
@@ -15,7 +23,10 @@ import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
 import com.entity.render.SimpleDatasetJsonRender;
 import com.google.common.collect.Lists;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.util.Utility;
+import static com.util.AppConstants.*;
 
 public class DatasetService {
 	
@@ -41,7 +52,35 @@ public class DatasetService {
 			return false;
 		}
 		return true;
-		
+	}
+	
+	public boolean saveDataset(String json, Context context){
+		try{
+			JsonParser jsonParser = new JsonParser();
+			JsonElement metadataJson = jsonParser.parse(json).getAsJsonObject().get("metadata");
+			Resource resource = new ClassPathResource("wdc-flat.js");
+			ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+			engine.eval(new FileReader(resource.getFile()));
+			Invocable invocable = (Invocable) engine;
+			LinkedHashMap<String, String> metadataKeyValue = (LinkedHashMap<String, String>) invocable.invokeFunction("json2flat", metadataJson.toString());
+			String uuid = metadataKeyValue.get(DATASET_DOT_ID);
+			
+			Dataset dataset = new Dataset();
+			dataset.setUuid(uuid);
+			dataset.setJsonData(json);
+			dataset.setSnapshotDate(LocalDateTime.now());
+			dataset.setOwnerId(context.getUserId());
+
+			MetadataKeyValue metadata = new MetadataKeyValue();
+			metadata.setUuid(uuid);
+			metadata.setTable(Dataset.TABLE);
+			metadata.setKeyValue(metadataKeyValue);
+			
+			return saveDataset(dataset, metadata);
+		}catch(Exception ex){
+			LOGGER.error(ex.getMessage(), ex);
+			return false;
+		}
 	}
 
 	public List<SimpleDatasetJsonRender> findByUser(Integer userId) {
@@ -78,5 +117,32 @@ public class DatasetService {
 			}
 		}
 		return list;
+	}
+	
+	public static Context newContext(){
+		return new Context();
+	}
+	
+	public static class Context{
+		private Integer userId;
+		private String message;
+		
+		private Context(){}
+		
+		public Integer getUserId() {
+			return userId;
+		}
+		public Context withUserId(Integer userId) {
+			this.userId = userId;
+			return this;
+		}
+		
+		public String getMessage() {
+			return message;
+		}
+		public Context withMessage(String message) {
+			this.message = message;
+			return this;
+		}
 	}
 }

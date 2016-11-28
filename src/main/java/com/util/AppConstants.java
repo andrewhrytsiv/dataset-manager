@@ -13,4 +13,5 @@ public class AppConstants {
 	public static final String BEARER = "Bearer ";
 	public static final String GO_AWAY = "Go Away!";
 	public static final String EXPIRATION = "exp";
+	public static final String DATASET_DOT_ID = "dataset.id";
 }

@@ -20,6 +20,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.util.Pair;
 import com.util.Utility;
+import static com.util.AppConstants.*;
 
 public class DashboardService {
 	
@@ -53,7 +54,7 @@ public class DashboardService {
 				try{
 					String datasetJson = dsetPair.getLeft();
 					LinkedHashMap<String, String> metadataKeyValue = dsetPair.getRight();
-					String uuid = metadataKeyValue.get("dataset.id");
+					String uuid = metadataKeyValue.get(DATASET_DOT_ID);
 					Dataset dataset = new Dataset();
 					dataset.setUuid(uuid);
 					dataset.setJsonData(datasetJson);
