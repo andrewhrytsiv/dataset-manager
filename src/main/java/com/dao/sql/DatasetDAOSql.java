@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
@@ -22,11 +20,15 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dao.DatasetDAO;
 import com.entity.Dataset;
+import com.entity.Dictionary;
 import com.entity.MetadataKeyValue;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.service.DatasetService;
-
+/**
+ *  DatasetDAO works with dataset,metadata_key_value,dictionary tables.
+ *  Yeah, I know it breaks pattern. But dataset abstraction is complex data definitions based on metadata.
+ *  And we use few tables to search  json parts quickly. 
+ */
 @Repository
 public class DatasetDAOSql implements DatasetDAO{
 	
@@ -147,5 +149,36 @@ public class DatasetDAOSql implements DatasetDAO{
 		}
 		return Lists.newArrayList(resultMap.values());
 	}
-
+	
+	@Override
+	public Dictionary findDictionary(String key){
+		String sql = "SELECT * FROM dictionary WHERE key = ? ";
+		Dictionary dictionary = (Dictionary)jdbcTemplate.queryForObject(sql, new Object[] {key}, new DictionaryRowMapper());
+		return dictionary;
+	}
+	
+	@Override
+	public List<Dictionary> findDictionaries(String type){
+		String sql = "SELECT * FROM dictionary WHERE type = ? ";
+		List<Dictionary> dictionaryList = Lists.newArrayList();
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, new Object[] {type});
+		for (Map<String, Object> row : rows) {
+			Dictionary dictionary = new Dictionary();
+			dictionary.setKey((String)row.get("key"));
+			dictionary.setType((String)row.get("type"));
+			dictionary.setDictionaryJson((String)row.get("dictionary_json"));
+			dictionaryList.add(dictionary);
+		}
+		return dictionaryList;
+	}
+	
+	@Override
+	public void insert(Dictionary dictionary){
+		
+	}
+	
+	@Override
+	public void insert(List<Dictionary> dictionaryList){
+		
+	}
 }
