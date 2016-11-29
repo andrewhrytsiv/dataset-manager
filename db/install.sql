@@ -46,3 +46,10 @@ create table metadata_key_value(
 	dset_id text NOT NULL,
 	table_name varchar(20) NOT NULL
 );
+
+create table dictionary(
+	id serial,
+	key text,
+	type text,
+	dictionary_json json
+);

@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.dao.DataAccessException;
 
 import com.entity.Dataset;
+import com.entity.Dictionary;
 import com.entity.MetadataKeyValue;
 
 public interface DatasetDAO {
@@ -24,5 +25,13 @@ public interface DatasetDAO {
 	MetadataKeyValue findMetadata(String datasetId);
 
 	List<MetadataKeyValue> findAllMetadata();
+
+	Dictionary findDictionary(String key);
+
+	List<Dictionary> findDictionaries(String type);
+
+	void insert(Dictionary dictionary);
+
+	void insert(List<Dictionary> dictionaryList);
 
 }
