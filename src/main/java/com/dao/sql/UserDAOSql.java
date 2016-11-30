@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import com.dao.UserDAO;
+import com.dao.sql.mapper.UserRowMapper;
 import com.entity.User;
 
 @Repository 
