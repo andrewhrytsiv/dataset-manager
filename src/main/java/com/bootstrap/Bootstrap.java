@@ -9,19 +9,26 @@ import java.security.CodeSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.filter.ProtectedFilter;
+import com.scheduler.DatasetsScheduledService;
 
 
 public class Bootstrap {
 	
 	private static final int DEFAULT_PORT = 4567;
 	public static final String API_CONTEXT = "/api";
+	public static AnnotationConfigApplicationContext springContext;
  
     public static void main(String[] args) throws URISyntaxException {
          port(getHerokuAssignedPort());
          externalStaticFileLocation(getPublicFolderPath());
          setFilters();
          initSpringConfigs();
+         startAsyncServices();
     }
+    
+    private static void startAsyncServices() {
+		springContext.getBean(DatasetsScheduledService.class).startAsync();
+	}
     
     private static void setFilters() { 
 		before(API_CONTEXT + "/protected/*", new ProtectedFilter());
@@ -43,10 +50,10 @@ public class Bootstrap {
     }
 
 	private static AnnotationConfigApplicationContext initSpringConfigs() {
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(SpringAppConfig.class);
-        context.register(SpringDatabaseConfig.class);
-        context.refresh();
-		return context;
+		springContext = new AnnotationConfigApplicationContext();
+		springContext.register(SpringAppConfig.class);
+		springContext.register(SpringDatabaseConfig.class);
+		springContext.refresh();
+		return springContext;
 	}
 }
