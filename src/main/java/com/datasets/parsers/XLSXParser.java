@@ -3,7 +3,6 @@ package com.datasets.parsers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -93,12 +92,6 @@ public class XLSXParser extends Parser<XLSXFileModel>{
 			errorMessage = error.getMessage();
 		}
 		return errorMessage;
-	}
-
-	@Override
-	public String read(URI file) {
-		
-		return null;
 	}
 	
 	public List<String> getWarnings(){
