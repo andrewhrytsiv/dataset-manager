@@ -55,6 +55,7 @@ public class DashboardService {
 			JSONDatasetsParser parser = new JSONDatasetsParser();
 			parser.read(fileStream);
 			List<Pair<String, LinkedHashMap<String, String>>> datasetsList = parser.parseDatasets();
+			String datasetDownloadApiLink = parser.getFileModel().getSourceHostDownloadLink();
 			for(Pair<String, LinkedHashMap<String, String>> dsetPair : datasetsList){
 				try{
 					String datasetJson = dsetPair.getLeft();
@@ -65,6 +66,7 @@ public class DashboardService {
 					dataset.setJsonData(datasetJson);
 					dataset.setSnapshotDate(LocalDateTime.now());
 					dataset.setOwnerId(context.getUserId());
+					dataset.setUrl(datasetDownloadApiLink + uuid);
 					
 					MetadataKeyValue metadata = new MetadataKeyValue();
 					metadata.setUuid(uuid);
