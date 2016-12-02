@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datasets.filemodels.DatasetsJsonFileModel;
 import com.datasets.filemodels.DictionaryJsonFileModel;
 import com.entity.Dictionary;
 import com.google.common.base.Charsets;
@@ -20,7 +18,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
-import com.resource.DashboardResource;
 
 public class JSONDictionaryParser extends Parser<DictionaryJsonFileModel>{
 	
@@ -46,12 +43,6 @@ public class JSONDictionaryParser extends Parser<DictionaryJsonFileModel>{
 		JsonArray datasetArray = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject().getAsJsonArray("list");
 		fileModel = new DictionaryJsonFileModel(datasetArray);
 		return message;
-	}
-
-	@Override
-	public String read(URI file) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	public List<Dictionary> parseDictionary() {

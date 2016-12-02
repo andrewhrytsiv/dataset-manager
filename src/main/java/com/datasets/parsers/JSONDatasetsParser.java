@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -49,12 +48,6 @@ public class JSONDatasetsParser extends Parser<DatasetsJsonFileModel>{
 		JsonArray datasetArray = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject().getAsJsonArray("list");
 		fileModel = new DatasetsJsonFileModel(datasetArray);
 		return message;
-	}
-
-	@Override
-	public String read(URI file) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public DatasetsJsonFileModel getFileModel() {

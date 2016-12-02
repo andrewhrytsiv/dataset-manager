@@ -18,7 +18,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import com.dao.DatasetDAO;
-import com.dao.DictionaryDAO;
 import com.datasets.json.JSObject;
 import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
@@ -55,6 +54,7 @@ public class DatasetService {
 		return true;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public boolean saveDataset(String json, Context context){
 		try{
 			JsonParser jsonParser = new JsonParser();
