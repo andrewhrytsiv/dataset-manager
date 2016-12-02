@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.io.CharStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.util.Pair;
 
@@ -35,8 +36,10 @@ public class JSONDatasetsParser extends Parser<DatasetsJsonFileModel>{
 		String message = null;
 		String jsonFile = CharStreams.toString(new InputStreamReader(fileStream, Charsets.UTF_8));
 		JsonParser jsonParser = new JsonParser();
-		JsonArray datasetArray = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject().getAsJsonArray("list");
-		fileModel = new DatasetsJsonFileModel(datasetArray);
+		JsonObject dataObject = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject();
+		String sourceHost = dataObject.get("source").getAsString();
+		JsonArray datasetArray = dataObject.getAsJsonArray("list");
+		fileModel = new DatasetsJsonFileModel(sourceHost, datasetArray);
 		return message;
 	}
 
@@ -45,8 +48,10 @@ public class JSONDatasetsParser extends Parser<DatasetsJsonFileModel>{
 		String message = null;
 		String jsonFile = CharStreams.toString(new InputStreamReader( new FileInputStream(file), Charsets.UTF_8));
 		JsonParser jsonParser = new JsonParser();
-		JsonArray datasetArray = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject().getAsJsonArray("list");
-		fileModel = new DatasetsJsonFileModel(datasetArray);
+		JsonObject dataObject = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject();
+		String sourceHost = dataObject.get("source").getAsString();
+		JsonArray datasetArray = dataObject.getAsJsonArray("list");
+		fileModel = new DatasetsJsonFileModel(sourceHost, datasetArray);
 		return message;
 	}
 
