@@ -49,4 +49,7 @@ public class Utility {
 		}
 	} 
 	
+	public static String wrapSingleQuotese(String str){
+		return "'" + str + "'";
+	}
 }

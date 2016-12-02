@@ -132,6 +132,7 @@
                 switch ($scope.fileType) {
                     case "xlsx":
                     case "json_datasets":
+                    case "json_dictionary":
                         $scope.datasetLoading = true;
                         Upload.upload({
                             url: 'api/protected/dashboard/fileupload?type='+$scope.fileType,
@@ -157,30 +158,30 @@
                             // console.log('progress: ' + progressPercentage+'%');
                         });
                         break;
-                    case "json_dictionary":
-                        $scope.datasetLoading = true;
-                        var reader = new FileReader();
-                        reader.onload = (function (theFile) {
-                            return function (e) {
-                                try {
-                                    var json = JSON.parse(e.target.result);
-                                    $http.post('/api/protected/dashboard/jsonfile?type='+$scope.fileType, JSON.stringify(json))
-                                        .success(function (response) {
-                                            $scope.datasetLoading = false;
-                                            $mdDialog.cancel();
-                                        })
-                                        .error(function (response, status) {
-                                            $scope.datasetLoading = false;
-                                            $mdDialog.cancel();
-                                            showAlert(response);
-                                        });
-                                } catch (ex) {
-                                    alert('Error when trying to parse json = ' + ex);
-                                }
-                            }
-                        })(fileToLoad);
-                        reader.readAsText(fileToLoad);
-                        break;
+                    // case "json_":
+                    //     $scope.datasetLoading = true;
+                    //     var reader = new FileReader();
+                    //     reader.onload = (function (theFile) {
+                    //         return function (e) {
+                    //             try {
+                    //                 var json = JSON.parse(e.target.result);
+                    //                 $http.post('/api/protected/dashboard/jsonfile?type='+$scope.fileType, JSON.stringify(json))
+                    //                     .success(function (response) {
+                    //                         $scope.datasetLoading = false;
+                    //                         $mdDialog.cancel();
+                    //                     })
+                    //                     .error(function (response, status) {
+                    //                         $scope.datasetLoading = false;
+                    //                         $mdDialog.cancel();
+                    //                         showAlert(response);
+                    //                     });
+                    //             } catch (ex) {
+                    //                 alert('Error when trying to parse json = ' + ex);
+                    //             }
+                    //         }
+                    //     })(fileToLoad);
+                    //     reader.readAsText(fileToLoad);
+                    //     break;
                 }
             }
         };

@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.datasets.parsers.JSONParser;
+import com.datasets.parsers.JSONDatasetsParser;
+import com.datasets.parsers.JSONDictionaryParser;
 import com.datasets.parsers.XLSXParser;
 import com.entity.Dataset;
+import com.entity.Dictionary;
 import com.entity.MetadataKeyValue;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
@@ -29,6 +31,9 @@ public class DashboardService {
 	@Autowired
 	private DatasetService datasetService;
 	
+	@Autowired
+	private DictionaryService dictionaryService;
+	
 	public boolean saveDatasetFromFile(InputStream fileStream, Context context){
 		boolean saved = false;
 		switch (context.getType()) {
@@ -38,7 +43,7 @@ public class DashboardService {
 		case "json_datasets":
 			saved = saveDatasetsFromJsonFile(fileStream, context);
 			break;
-		case "json_dictionaty":
+		case "json_dictionary":
 			saved = saveDictionaryFromJsonFile(fileStream, context);
 			break;
 		}
@@ -47,7 +52,7 @@ public class DashboardService {
 	
 	public boolean saveDatasetsFromJsonFile(InputStream fileStream, Context context){
 		try {
-			JSONParser parser = new JSONParser();
+			JSONDatasetsParser parser = new JSONDatasetsParser();
 			parser.read(fileStream);
 			List<Pair<String, LinkedHashMap<String, String>>> datasetsList = parser.parseDatasets();
 			for(Pair<String, LinkedHashMap<String, String>> dsetPair : datasetsList){
@@ -74,11 +79,20 @@ public class DashboardService {
 			
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
+			return false;
 		}
 		return true;
 	}
 	
 	public boolean saveDictionaryFromJsonFile(InputStream fileStream, Context context){
+		try{
+			JSONDictionaryParser parser = new JSONDictionaryParser();
+			parser.read(fileStream);
+			List<Dictionary> dictionaryList = parser.parseDictionary();
+			dictionaryService.saveDictionary(dictionaryList);
+		}catch(Exception ex){
+			LOGGER.error("Dictionary saving problam");
+		}
 		return true;
 	}
 	
