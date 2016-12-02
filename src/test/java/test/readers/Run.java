@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.datasets.parsers.JSONParser;
+import com.datasets.parsers.JSONDatasetsParser;
 import com.datasets.parsers.XLSXParser;
 import com.datasets.query.RowData;
 import com.google.common.io.Files;
@@ -21,7 +21,7 @@ public class Run {
 
 	public static void main(String[] args) throws Exception {
 		File file  = new File("C:\\Users\\Andrew\\Downloads\\dj-dps.herokuapp.com_export_Dataset_2016_11_23_11_23_27.json");
-		JSONParser parser  = new JSONParser();
+		JSONDatasetsParser parser  = new JSONDatasetsParser();
 		parser.read(new FileInputStream(file));
 		parser.parseDatasets();
 	}

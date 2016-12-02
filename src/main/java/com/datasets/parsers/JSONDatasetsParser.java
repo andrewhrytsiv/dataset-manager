@@ -18,7 +18,7 @@ import javax.script.ScriptException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import com.datasets.filemodels.JSONFileModel;
+import com.datasets.filemodels.DatasetsJsonFileModel;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.CharStreams;
@@ -27,9 +27,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.util.Pair;
 
-public class JSONParser extends Parser<JSONFileModel>{
+public class JSONDatasetsParser extends Parser<DatasetsJsonFileModel>{
 	
-	private JSONFileModel fileModel;
+	private DatasetsJsonFileModel fileModel;
 
 	@Override
 	public String read(InputStream fileStream) throws Exception {
@@ -37,7 +37,7 @@ public class JSONParser extends Parser<JSONFileModel>{
 		String jsonFile = CharStreams.toString(new InputStreamReader(fileStream, Charsets.UTF_8));
 		JsonParser jsonParser = new JsonParser();
 		JsonArray datasetArray = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject().getAsJsonArray("list");
-		fileModel = new JSONFileModel(datasetArray);
+		fileModel = new DatasetsJsonFileModel(datasetArray);
 		return message;
 	}
 
@@ -47,7 +47,7 @@ public class JSONParser extends Parser<JSONFileModel>{
 		String jsonFile = CharStreams.toString(new InputStreamReader( new FileInputStream(file), Charsets.UTF_8));
 		JsonParser jsonParser = new JsonParser();
 		JsonArray datasetArray = jsonParser.parse(jsonFile).getAsJsonObject().get("data").getAsJsonObject().getAsJsonArray("list");
-		fileModel = new JSONFileModel(datasetArray);
+		fileModel = new DatasetsJsonFileModel(datasetArray);
 		return message;
 	}
 
@@ -57,7 +57,7 @@ public class JSONParser extends Parser<JSONFileModel>{
 		return null;
 	}
 
-	public JSONFileModel getFileModel() {
+	public DatasetsJsonFileModel getFileModel() {
 		return fileModel;
 	}
 	

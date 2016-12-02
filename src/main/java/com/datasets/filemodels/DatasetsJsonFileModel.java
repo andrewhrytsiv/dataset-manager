@@ -2,10 +2,10 @@ package com.datasets.filemodels;
 
 import com.google.gson.JsonArray;
 
-public class JSONFileModel {
+public class DatasetsJsonFileModel {
 	private final JsonArray datasetList;
 
-	public JSONFileModel(JsonArray datasetList) {
+	public DatasetsJsonFileModel(JsonArray datasetList) {
 		this.datasetList = datasetList;
 	}
 

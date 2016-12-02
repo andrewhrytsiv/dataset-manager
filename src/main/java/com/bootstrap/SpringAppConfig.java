@@ -9,6 +9,7 @@ import com.resource.DatasetResource;
 import com.service.AuthenticationService;
 import com.service.DashboardService;
 import com.service.DatasetService;
+import com.service.DictionaryService;
 
 @Configuration
 public class SpringAppConfig {
@@ -38,6 +39,11 @@ public class SpringAppConfig {
 	@Bean
 	public DashboardService dashboardService(){
 		return new DashboardService();
+	}
+	
+	@Bean
+	public DictionaryService dictionaryService(){
+		return new DictionaryService();
 	}
 	
 }

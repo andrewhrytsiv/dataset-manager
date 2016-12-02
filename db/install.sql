@@ -51,5 +51,6 @@ create table dictionary(
 	id serial,
 	key text,
 	type text,
-	dictionary_json json
+	dictionary_json json,
+	UNIQUE (key,type)
 );

@@ -12,8 +12,10 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.dao.DatasetDAO;
+import com.dao.DictionaryDAO;
 import com.dao.UserDAO;
 import com.dao.sql.DatasetDAOSql;
+import com.dao.sql.DictionaryDAOSql;
 import com.dao.sql.UserDAOSql;
 
 @Configuration
@@ -52,5 +54,10 @@ public class SpringDatabaseConfig {
 	@Bean
 	public DatasetDAO datasetDAO(){
 		return new DatasetDAOSql();
+	}
+	
+	@Bean
+	public DictionaryDAO dictionaryDAO(){
+		return new DictionaryDAOSql();
 	}
 }
