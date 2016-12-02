@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.resource.AuthenticationResource;
 import com.resource.DashboardResource;
 import com.resource.DatasetResource;
+import com.scheduler.DatasetsScheduledService;
 import com.service.AuthenticationService;
 import com.service.DashboardService;
 import com.service.DatasetService;
@@ -46,4 +47,8 @@ public class SpringAppConfig {
 		return new DictionaryService();
 	}
 	
+	@Bean
+	public DatasetsScheduledService datasetsScheduledService(){
+		return new DatasetsScheduledService();
+	}
 }
