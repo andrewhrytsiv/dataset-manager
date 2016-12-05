@@ -93,8 +93,8 @@ public class DatasetDAOSql implements DatasetDAO{
 	}
 	
 	private void insert(Dataset dataset) throws DataAccessException, SQLException{
-		String sql = "INSERT INTO datasets (dataset_id, json_data, url, personal, snapshot_date, owner) VALUES (?, ?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, new Object[] {dataset.getUuid(), dataset.getPGJson(), dataset.getUrl(), dataset.isPersonal(), dataset.getSnapshotDate(), dataset.getOwnerId()});
+		String sql = "INSERT INTO datasets (dataset_id, json_data, url, personal, snapshot_date, owner, next_update_interval_min) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		jdbcTemplate.update(sql, new Object[] {dataset.getUuid(), dataset.getPGJson(), dataset.getUrl(), dataset.isPersonal(), dataset.getSnapshotDate(), dataset.getOwnerId(), dataset.getNextUpdateInMinutes()});
 	}
 	
 	private void insert(MetadataKeyValue metadata){
@@ -108,13 +108,13 @@ public class DatasetDAOSql implements DatasetDAO{
 	@Override
 	public void update(Dataset dataset) throws DataAccessException, SQLException {
 		String sql = "UPDATE datasets SET  json_data = ?, url = ?, snapshot_date = ?, owner = ? next_update_interval_min = ? WHERE dataset_id = ?";
-		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getUrl(), dataset.getSnapshotDate(), dataset.getOwnerId(),dataset.getNextUpdateInMinutes(), dataset.getUuid()});
+		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getUrl(), dataset.getSnapshotDate(), dataset.getOwnerId(), dataset.getNextUpdateInMinutes(), dataset.getUuid()});
 	}
 	
 	@Override
 	public void updateDataOnly(Dataset dataset) throws DataAccessException, SQLException{
-		String sql = "UPDATE datasets SET  json_data = ?, snapshot_date = ? WHERE dataset_id = ?";
-		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getSnapshotDate(),  dataset.getUuid()});
+		String sql = "UPDATE datasets SET  json_data = ?, snapshot_date = ?, next_update_interval_min = ?  WHERE dataset_id = ?";
+		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getSnapshotDate(), dataset.getNextUpdateInMinutes(), dataset.getUuid()});
 	}
 
 	@Override
