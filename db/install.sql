@@ -39,6 +39,10 @@ create table datasets(
 	next_update_interval_min integer
 );
 
+CREATE VIEW should_update_datasets AS 
+ SELECT dataset_id, url, snapshot_date, next_update_interval_min,snapshot_date + (next_update_interval_min * interval '1 minute') as should_be_updated 
+ FROM  datasets 
+ WHERE url IS NOT NULL AND (snapshot_date + (next_update_interval_min * interval '1 minute'))  <  now();
 
 create table metadata_key_value(
 	id serial,
