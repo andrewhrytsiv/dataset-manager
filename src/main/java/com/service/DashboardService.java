@@ -20,6 +20,7 @@ import com.entity.MetadataKeyValue;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
+import com.util.AppConstants;
 import com.util.Pair;
 import com.util.Utility;
 import static com.util.AppConstants.*;
@@ -54,7 +55,7 @@ public class DashboardService {
 		try {
 			JSONDatasetsParser parser = new JSONDatasetsParser();
 			parser.read(fileStream);
-			List<Pair<String, LinkedHashMap<String, String>>> datasetsList = parser.parseDatasets();
+			List<Pair<String, LinkedHashMap<String, String>>> datasetsList = parser.parseDatasetsWithMetadata();
 			String datasetDownloadApiLink = parser.getFileModel().getSourceHostDownloadLink();
 			for(Pair<String, LinkedHashMap<String, String>> dsetPair : datasetsList){
 				try{
@@ -67,6 +68,7 @@ public class DashboardService {
 					dataset.setSnapshotDate(LocalDateTime.now());
 					dataset.setOwnerId(context.getUserId());
 					dataset.setUrl(datasetDownloadApiLink + uuid);
+					dataset.setNextUpdateInMinutes(AppConstants.ONE_WEEK_MINUTES);
 					
 					MetadataKeyValue metadata = new MetadataKeyValue();
 					metadata.setUuid(uuid);
@@ -122,6 +124,9 @@ public class DashboardService {
 			dataset.setSnapshotDate(LocalDateTime.now());
 			dataset.setOwnerId(context.getUserId());
 			dataset.setUrl(context.getUrl());
+			if(context.getUrl() != null){
+				dataset.setNextUpdateInMinutes(AppConstants.ONE_WEEK_MINUTES);
+			}
 			
 			MetadataKeyValue metadata = new MetadataKeyValue();
 			metadata.setUuid(uuid);

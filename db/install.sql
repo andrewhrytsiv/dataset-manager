@@ -35,7 +35,8 @@ create table datasets(
 	url text,
 	personal boolean,
 	snapshot_date timestamp,
-	owner integer
+	owner integer,
+	next_update_interval_min integer
 );
 
 

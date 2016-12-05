@@ -23,7 +23,7 @@ public class Run {
 		File file  = new File("C:\\Users\\Andrew\\Downloads\\dj-dps.herokuapp.com_export_Dataset_2016_11_23_11_23_27.json");
 		JSONDatasetsParser parser  = new JSONDatasetsParser();
 		parser.read(new FileInputStream(file));
-		parser.parseDatasets();
+		parser.parseDatasetsWithMetadata();
 	}
 	
 	

@@ -14,4 +14,10 @@ public class AppConstants {
 	public static final String GO_AWAY = "Go Away!";
 	public static final String EXPIRATION = "exp";
 	public static final String DATASET_DOT_ID = "dataset.id";
+	
+	public static final String START_LOADING_DATA_FROM = "Start loading data from ";
+	
+	public static final int ONE_HOUR_MINUTES = 60;
+	public static final int ONE_DAY_MINUTES = ONE_HOUR_MINUTES * 24;
+	public static final int ONE_WEEK_MINUTES = ONE_DAY_MINUTES * 7;
 }
