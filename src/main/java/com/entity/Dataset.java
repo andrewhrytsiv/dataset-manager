@@ -15,6 +15,7 @@ public class Dataset {
 	private boolean personal;
 	private LocalDateTime snapshotDate;
 	private Integer ownerId;
+	private Integer nextUpdateInMinutes;
 
 	public String getUuid() {
 		return uuid;
@@ -70,4 +71,13 @@ public class Dataset {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	public Integer getNextUpdateInMinutes() {
+		return nextUpdateInMinutes;
+	}
+
+	public void setNextUpdateInMinutes(Integer nextUpdateInMinutes) {
+		this.nextUpdateInMinutes = nextUpdateInMinutes;
+	}
+
 }

@@ -17,6 +17,8 @@ public interface DatasetDAO {
 	void insert(Dataset dataset,MetadataKeyValue metadata) throws DataAccessException, SQLException;
 
 	void update(Dataset dataset) throws DataAccessException, SQLException;
+	
+	void updateDataOnly(Dataset dataset) throws DataAccessException, SQLException;
 
 	List<Dataset> findByUser(Integer userId);
 

@@ -59,7 +59,7 @@ public class JSONDatasetsParser extends Parser<DatasetsJsonFileModel>{
 		return fileModel;
 	}
 	
-	public List<Pair<String, LinkedHashMap<String, String>>> parseDatasets() throws ScriptException, NoSuchMethodException, IOException{
+	public List<Pair<String, LinkedHashMap<String, String>>> parseDatasetsWithMetadata() throws ScriptException, NoSuchMethodException, IOException{
 		List<Pair<String, LinkedHashMap<String, String>>> datasetsList = Lists.newArrayList();
 		Resource resource = new ClassPathResource("wdc-flat.js");
 		ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
@@ -73,5 +73,16 @@ public class JSONDatasetsParser extends Parser<DatasetsJsonFileModel>{
 			datasetsList.add(new Pair<>(element.toString(), metadata));
 		}
 		return datasetsList;
-	} 
+	}
+	
+	@SuppressWarnings("unused")
+	public String parseDataset() throws ScriptException, NoSuchMethodException, IOException{
+		List<Pair<String, LinkedHashMap<String, String>>> datasetsList = Lists.newArrayList();
+		Resource resource = new ClassPathResource("wdc-flat.js");
+		ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+		engine.eval(new FileReader(resource.getFile()));
+		Invocable invocable = (Invocable) engine;
+		JsonArray array = fileModel.getDatasetList();
+		return array.get(0).toString();
+	}
 }
