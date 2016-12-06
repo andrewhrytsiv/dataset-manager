@@ -54,7 +54,7 @@ public class DatasetDAOSql implements DatasetDAO{
 	public List<Dataset> findByUser(Integer userId) {
 		List<Dataset> datasetList = Lists.newArrayList();
 		try{
-			String sql = "SELECT dataset_id, url, personal,snapshot_date FROM datasets ORDER BY snapshot_date DESC";
+			String sql = "SELECT dataset_id, url, personal,snapshot_date,next_update_interval_min FROM datasets ORDER BY snapshot_date DESC";
 			List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 			for (Map<String, Object> row : rows) {
 				Dataset dataset = new Dataset();
@@ -63,6 +63,7 @@ public class DatasetDAOSql implements DatasetDAO{
 				dataset.setPersonal((Boolean)row.get("personal"));
 				Timestamp date = (Timestamp)row.get("snapshot_date");
 				dataset.setSnapshotDate(date.toLocalDateTime());
+				dataset.setNextUpdateInMinutes((Integer)row.get("next_update_interval_min"));
 				datasetList.add(dataset);
 			}
 		}catch(Exception ex){

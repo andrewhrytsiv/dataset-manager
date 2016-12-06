@@ -1,10 +1,13 @@
 package com.entity.render;
 
+import com.util.Period;
+
 public class SimpleDatasetJsonRender {
 	private String id;
 	private String url;
 	private Boolean personal;
 	private String snapshotDate;
+	private Period period;
 	
 	public String getId() {
 		return id;
@@ -29,5 +32,11 @@ public class SimpleDatasetJsonRender {
 	}
 	public void setSnapshotDate(String snapshotDate) {
 		this.snapshotDate = snapshotDate;
+	}
+	public Period getPeriod() {
+		return period;
+	}
+	public void setPeriod(Period period) {
+		this.period = period;
 	}
 }
