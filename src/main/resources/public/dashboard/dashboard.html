@@ -14,6 +14,7 @@
                                     <div class="md-list-item-text border-padding" layout="column">
                                         <p>ID: {{ dset.id }}</p>
                                         <p>Last modified: {{ dset.snapshotDate }}</p>
+                                        <p ng-show="dset.url">Next update in: {{dset.period.dd}} days {{dset.period.hh}} hours {{dset.period.mm}} minutes</p>
                                         <p ng-show="dset.url">URL: {{ dset.url }}</p>
                                     </div>
                                 </md-list-item-text>

@@ -31,6 +31,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.util.AppConstants;
 import com.util.Pair;
+import com.util.Period;
 import com.util.Utility;
 import static com.util.AppConstants.*;
 
@@ -93,6 +94,9 @@ public class DatasetService {
 			dset.setUrl(dataset.getUrl());
 			dset.setPersonal(dataset.isPersonal());
 			dset.setSnapshotDate(dataset.getSnapshotDate().format(DateTimeFormatter.ofPattern(Utility.DATE_FORMAT)));
+			if(dataset.getNextUpdateInMinutes() != null){
+				dset.setPeriod(new Period(dataset.getNextUpdateInMinutes()));
+			}
 			return dset;
 		}).collect(Collectors.toList());
 		return simpleList;
