@@ -10,6 +10,7 @@
             loadDatasets()
         });
         $scope.loadMetadataForDatasets = loadMetadataForDatasets;
+        $scope.editPeriod = editPeriod;
         loadDatasets();
         loadMetadataForDatasets();
 
@@ -60,6 +61,10 @@
                     }
                 });
         };
+
+        function editPeriod(datasetId){
+            console.log(datasetId);
+        }
     });
 
     app.directive('uploadFileComponent', uploadFileComponent);
