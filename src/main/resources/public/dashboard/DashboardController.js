@@ -154,7 +154,7 @@
                             if(resp.status == 401){
                                 AuthenticationService.logout();
                                 $location.path('/login');
-                            }else if(resp.status == 408){//on heroku request timeout only 30 sec
+                            }else if(resp.status == 503){//on heroku request timeout(408) but return 503 only 30 sec
                                 $mdDialog.cancel();
                                 console.log("heroku server request timeout=30sec");
                             } else{
