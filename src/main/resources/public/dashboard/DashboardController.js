@@ -62,8 +62,8 @@
                 });
         };
 
-        function editPeriod(){
-            console.log("dadatasetId");
+        function editPeriod(dataset){
+            console.log(dataset.id);
         }
     });
 
