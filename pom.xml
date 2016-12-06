@@ -158,6 +158,7 @@
       			<includes>
         			<include>address.properties</include>
         			<include>log4j.properties</include>
+        			<include>wdc-flat.js</include>
       			</includes>
         	</resource>
         	<resource>
