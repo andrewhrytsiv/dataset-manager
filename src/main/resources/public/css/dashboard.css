@@ -27,4 +27,20 @@ pre {
 .border-padding{
     padding-top: 5px;
     padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+.edit_button {
+    max-width: 14px;
+    min-width: 14px;
+}
+.edit_button:hover{
+    background-color: aquamarine;
+}
+
+.row-box{
+    float: left;
+}
+.after-row-box {
+    clear: left;
 }
