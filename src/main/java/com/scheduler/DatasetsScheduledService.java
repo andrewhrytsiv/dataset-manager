@@ -1,6 +1,6 @@
 package com.scheduler;
 
-import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -30,7 +30,11 @@ public class DatasetsScheduledService extends AbstractScheduledService {
 	@Override
 	protected void runOneIteration() throws Exception {
 		try{
-			datasetUpdateTask().start();
+			Map<String, String>  idUrlMap = datasetService.getDatasetsUrlWithExpirationDate();
+			for(Map.Entry<String, String> entry : idUrlMap.entrySet()){
+				Runnable task = new DatasetUpdateTask(datasetService, entry.getKey(), entry.getValue());
+				new Thread(task).start();
+			}
 		}catch(Exception ex){
 			LOGGER.error("Can't start dataset update task.");
 		}
@@ -42,9 +46,4 @@ public class DatasetsScheduledService extends AbstractScheduledService {
 		return Scheduler.newFixedRateSchedule(0, 30, TimeUnit.SECONDS);
 	}
 	
-	private Thread datasetUpdateTask(){
-		Runnable task = () -> { System.out.println("Task#"+ LocalDateTime.now() +" is running"); };
-		return new Thread(task);
-	}
-
 }

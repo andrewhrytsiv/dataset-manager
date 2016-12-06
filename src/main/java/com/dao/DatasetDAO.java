@@ -2,6 +2,7 @@ package com.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
@@ -25,5 +26,7 @@ public interface DatasetDAO {
 	MetadataKeyValue findMetadata(String datasetId);
 
 	List<MetadataKeyValue> findAllMetadata();
+
+	Map<String, String> getDatasetsUrlWithExpirationDate();
 
 }

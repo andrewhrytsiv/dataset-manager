@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.script.Invocable;
@@ -59,35 +60,9 @@ public class DatasetService {
 		return true;
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	public boolean saveDataset(String json, Context context){
-//		try{
-//			JsonParser jsonParser = new JsonParser();
-//			JsonElement metadataJson = jsonParser.parse(json).getAsJsonObject().get("metadata");
-//			Resource resource = new ClassPathResource("wdc-flat.js");
-//			ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-//			engine.eval(new FileReader(resource.getFile()));
-//			Invocable invocable = (Invocable) engine;
-//			LinkedHashMap<String, String> metadataKeyValue = (LinkedHashMap<String, String>) invocable.invokeFunction("json2flat", metadataJson.toString());
-//			String uuid = metadataKeyValue.get(DATASET_DOT_ID);
-//			
-//			Dataset dataset = new Dataset();
-//			dataset.setUuid(uuid);
-//			dataset.setJsonData(json);
-//			dataset.setSnapshotDate(LocalDateTime.now());
-//			dataset.setOwnerId(context.getUserId());
-//
-//			MetadataKeyValue metadata = new MetadataKeyValue();
-//			metadata.setUuid(uuid);
-//			metadata.setTable(Dataset.TABLE);
-//			metadata.setKeyValue(metadataKeyValue);
-//			
-//			return saveDataset(dataset, metadata);
-//		}catch(Exception ex){
-//			LOGGER.error(ex.getMessage(), ex);
-//			return false;
-//		}
-//	}
+	public Map<String, String> getDatasetsUrlWithExpirationDate(){
+		return datasetDAO.getDatasetsUrlWithExpirationDate();
+	}
 	
 	public boolean updateDatasetFromUrl(String datasetId, String url){
 		try{
@@ -105,7 +80,7 @@ public class DatasetService {
 			
 			datasetDAO.updateDataOnly(dataset);
 		}catch(Exception ex){
-			LOGGER.error(ex.getMessage(), ex);
+			LOGGER.error("Error when loading from "+url, ex);
 			return false;
 		}
 		return true;

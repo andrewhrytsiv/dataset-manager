@@ -70,6 +70,19 @@ public class DatasetDAOSql implements DatasetDAO{
 		}
 		return datasetList;
 	}
+	
+	@Override
+	public Map<String, String> getDatasetsUrlWithExpirationDate() {
+		String sql = "SELECT dataset_id, url FROM should_update_datasets LIMIT 10";
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+		Map<String, String> result = Maps.newLinkedHashMap();
+		for (Map<String, Object> row : rows) {
+			String id = (String) row.get("dataset_id");
+			String url = (String) row.get("url");
+			result.put(id, url);
+		}
+		return result;
+	}
 
 	@Override
 	public boolean exist(String datasetId) {
@@ -113,8 +126,8 @@ public class DatasetDAOSql implements DatasetDAO{
 	
 	@Override
 	public void updateDataOnly(Dataset dataset) throws DataAccessException, SQLException{
-		String sql = "UPDATE datasets SET  json_data = ?, snapshot_date = ?, next_update_interval_min = ?  WHERE dataset_id = ?";
-		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getSnapshotDate(), dataset.getNextUpdateInMinutes(), dataset.getUuid()});
+		String sql = "UPDATE datasets SET  json_data = ?, snapshot_date = ?  WHERE dataset_id = ?";
+		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getSnapshotDate(), dataset.getUuid()});
 	}
 
 	@Override

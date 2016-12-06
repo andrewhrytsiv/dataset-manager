@@ -7,4 +7,6 @@ public class HTTP {
 	public static int NOT_FOUND = 404;
 	public static int ACCEPTED = 202;
 	public static int INTERNAL_SERVER_ERROR = 500;
+	
+	public static String https = "https://";
 }
