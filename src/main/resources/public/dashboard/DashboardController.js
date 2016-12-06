@@ -62,8 +62,8 @@
                 });
         };
 
-        function editPeriod(datasetId){
-            console.log(datasetId);
+        function editPeriod(){
+            console.log("dadatasetId");
         }
     });
 
@@ -154,7 +154,10 @@
                             if(resp.status == 401){
                                 AuthenticationService.logout();
                                 $location.path('/login');
-                            }else{
+                            }else if(resp.status == 408){//on heroku request timeout only 30 sec
+                                $mdDialog.cancel();
+                                console.log("heroku server request timeout=30sec");
+                            } else{
                                 $mdDialog.cancel();
                                 showAlert(resp);
                             }
