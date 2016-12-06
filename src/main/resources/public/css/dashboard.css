@@ -39,6 +39,7 @@ pre {
 }
 
 .row-box{
+    max-width: 300px;
     float: left;
 }
 .after-row-box {
