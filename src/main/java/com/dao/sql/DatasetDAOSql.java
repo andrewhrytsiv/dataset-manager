@@ -121,7 +121,7 @@ public class DatasetDAOSql implements DatasetDAO{
 
 	@Override
 	public void update(Dataset dataset) throws DataAccessException, SQLException {
-		String sql = "UPDATE datasets SET  json_data = ?, url = ?, snapshot_date = ?, owner = ? next_update_interval_min = ? WHERE dataset_id = ?";
+		String sql = "UPDATE datasets SET  json_data = ?, url = ?, snapshot_date = ?, owner = ?, next_update_interval_min = ? WHERE dataset_id = ?";
 		jdbcTemplate.update(sql, new Object[] {dataset.getPGJson(), dataset.getUrl(), dataset.getSnapshotDate(), dataset.getOwnerId(), dataset.getNextUpdateInMinutes(), dataset.getUuid()});
 	}
 	
