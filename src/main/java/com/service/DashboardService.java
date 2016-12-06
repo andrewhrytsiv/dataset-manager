@@ -21,6 +21,7 @@ import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.util.AppConstants;
+import com.util.HTTP;
 import com.util.Pair;
 import com.util.Utility;
 import static com.util.AppConstants.*;
@@ -67,7 +68,7 @@ public class DashboardService {
 					dataset.setJsonData(datasetJson);
 					dataset.setSnapshotDate(LocalDateTime.now());
 					dataset.setOwnerId(context.getUserId());
-					dataset.setUrl(datasetDownloadApiLink + uuid);
+					dataset.setUrl(HTTP.https + datasetDownloadApiLink + uuid);
 					dataset.setNextUpdateInMinutes(AppConstants.ONE_WEEK_MINUTES);
 					
 					MetadataKeyValue metadata = new MetadataKeyValue();

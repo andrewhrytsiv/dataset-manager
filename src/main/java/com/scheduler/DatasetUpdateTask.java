@@ -11,17 +11,21 @@ public class DatasetUpdateTask implements Runnable{
 	
 	private String taskName;
 	private DatasetService datasetService;
+	private String datasetId;
+	private String url;
 	
-	public DatasetUpdateTask(String taskName, DatasetService datasetService){
+	public DatasetUpdateTask(DatasetService datasetService, String datasetId, String url){
 		this.datasetService = datasetService;
+		this.datasetId = datasetId;
+		this.url = url;
+		this.taskName = "DatasetUpdateTask(id->" + datasetId + ",url->" + url + ")";
 	}
 
 	@Override
 	public void run() {
-		LOGGER.info("Start task#"+taskName);
-//		select * from dataset to update 
-		datasetService.updateDatasetFromUrl("datasetId", "url");
-		LOGGER.info("Finish task#"+taskName);
+		LOGGER.info("Start "+taskName);
+		datasetService.updateDatasetFromUrl(datasetId, url);
+		LOGGER.info("Finish "+taskName);
 	}
 
 }
