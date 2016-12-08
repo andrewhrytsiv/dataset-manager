@@ -16,7 +16,7 @@
                                         <p>Last modified: {{ dset.snapshotDate }}</p>
                                         <p ng-show="dset.url">URL: {{ dset.url }}</p>
                                         <div ng-show="dset.url" style="max-width:375px;">
-                                            Next update in:
+                                            Update interval:
                                             <input ng-model="dset.period.dd" type="number" style="width:50px; text-align: right;" min="0" step="1" value={{dset.period.dd}} />
                                             days
                                             <input ng-model="dset.period.hh" type="number" style="width:40px; text-align: right;" min="0" max="24" step="1" value={{dset.period.hh}} />
