@@ -166,5 +166,11 @@ public class DatasetDAOSql implements DatasetDAO{
 		}
 		return Lists.newArrayList(resultMap.values());
 	}
+
+	@Override
+	public void updateDatasetInterval(String datasetId, int minutes) {
+		String sql = "UPDATE datasets SET  next_update_interval_min = ? WHERE dataset_id = ?";
+		jdbcTemplate.update(sql, new Object[] {minutes, datasetId});
+	}
 	
 }

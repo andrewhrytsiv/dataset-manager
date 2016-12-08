@@ -18,6 +18,8 @@ import static com.bootstrap.Bootstrap.*;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.DashboardService;
@@ -25,6 +27,7 @@ import com.service.DatasetService;
 import com.transformer.JsonTransformer;
 import com.util.HTTP;
 import com.util.MediaType;
+import com.util.Period;
 import com.util.Utility;
 
 public class DashboardResource extends Resource{
@@ -95,6 +98,20 @@ public class DashboardResource extends Resource{
 			response.status(HTTP.OK);
 			String jsonArray = "[" + Joiner.on(",").join(metadataList) + "]";
 			return metadataList.isEmpty() ? EMPTY_RESPONSE : jsonArray;
+		});
+		
+		
+		post(API_CONTEXT + "/protected/dashboard/updateperiod/:datasetID", MediaType.APPLICATION_JSON, (request, response) -> {
+			String datasetId = request.params(":datasetID");
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(request.body());
+			int minutes = element.getAsJsonObject().get("period").getAsInt();
+			if(datasetService.updateDatasetInterval(datasetId, minutes)){
+				response.status(HTTP.OK);
+			}else{
+				response.status(HTTP.INTERNAL_SERVER_ERROR);
+			}
+			return EMPTY_RESPONSE;
 		});
 		
 	}

@@ -10,7 +10,7 @@
             loadDatasets()
         });
         $scope.loadMetadataForDatasets = loadMetadataForDatasets;
-        $scope.editPeriod = editPeriod;
+        $scope.savePeriod = savePeriod;
         loadDatasets();
         loadMetadataForDatasets();
 
@@ -62,8 +62,15 @@
                 });
         };
 
-        function editPeriod(dataset){
-            console.log(dataset.id);
+        function savePeriod(dataset){
+            var allTimeMinutes = 60 * 24 * dataset.period.dd + 60 * dataset.period.hh + dataset.period.mm;
+            $http.post('/api/protected/dashboard/updateperiod/'+dataset.id,{period : allTimeMinutes})
+                .success(function (response) {
+                    console.log("Successfully updated " + dataset.period + " for datasetId="+dataset.id);
+                })
+                .error(function (response, status) {
+                    console.log("Failed to update " + dataset.period + " for datasetId="+dataset.id);
+                });
         }
     });
 

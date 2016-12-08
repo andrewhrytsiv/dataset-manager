@@ -35,7 +35,7 @@ pre {
     min-width: 14px;
 }
 .edit_button:hover{
-    background-color: aquamarine;
+    background-color: #bce8f1;
 }
 
 .row-box{
@@ -45,3 +45,10 @@ pre {
 .after-row-box {
     clear: left;
 }
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+

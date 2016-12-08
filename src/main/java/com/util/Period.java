@@ -2,9 +2,9 @@ package com.util;
 
 public class Period {
 	
-	private int dd;
-	private int hh;
-	private int mm;
+	private Integer dd = 0;
+	private Integer hh = 0;
+	private Integer mm = 0;
 	
 	public Period(int minutes){
 		dd = minutes / AppConstants.ONE_DAY_MINUTES; 
