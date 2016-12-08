@@ -126,6 +126,16 @@ public class DatasetService {
 		return list;
 	}
 	
+	public boolean updateDatasetInterval(String datasetId, int minutes) {
+		try{
+			datasetDAO.updateDatasetInterval(datasetId, minutes);
+		}catch(Exception ex){
+			LOGGER.error("Can't update interval for datasetId="+datasetId);
+			return false;
+		}
+		return true;
+	}
+	
 	public static Context newContext(){
 		return new Context();
 	}
@@ -152,4 +162,5 @@ public class DatasetService {
 			return this;
 		}
 	}
+	
 }

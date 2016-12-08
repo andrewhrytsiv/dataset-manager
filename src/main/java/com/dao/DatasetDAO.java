@@ -29,4 +29,6 @@ public interface DatasetDAO {
 
 	Map<String, String> getDatasetsUrlWithExpirationDate();
 
+	void updateDatasetInterval(String datasetId, int minutes);
+
 }

@@ -14,20 +14,18 @@
                                     <div class="md-list-item-text border-padding" layout="column">
                                         <p>ID: {{ dset.id }}</p>
                                         <p>Last modified: {{ dset.snapshotDate }}</p>
-                                        <!--<div ng-show="dset.url">-->
-                                            <!--<input type="number" min="0" step="1" value={{dset.period.dd}} />-->
-                                            <!--days-->
-                                            <!--<input type="number" min="0" max="24" step="1" value={{dset.period.hh}}/>-->
-                                            <!--hours-->
-                                            <!--<input type="number" min="0" max="60" step="1" value={{dset.period.mm}}/>-->
-                                            <!--minutes-->
-                                        <!--</div>-->
                                         <p ng-show="dset.url">URL: {{ dset.url }}</p>
-                                        <div>
-                                            <span ng-show="dset.url" class="inline">Next update in: {{dset.period.dd}} days {{dset.period.hh}} hours {{dset.period.mm}} minutes</span>
+                                        <div ng-show="dset.url" style="max-width:375px;">
+                                            Next update in:
+                                            <input ng-model="dset.period.dd" type="number" style="width:50px; text-align: right;" min="0" step="1" value={{dset.period.dd}} />
+                                            days
+                                            <input ng-model="dset.period.hh" type="number" style="width:40px; text-align: right;" min="0" max="24" step="1" value={{dset.period.hh}} />
+                                            hours
+                                            <input ng-model="dset.period.mm" type="number" style="width:40px; text-align: right;" min="0" max="60" step="1" value={{dset.period.mm}} />
+                                            minutes
                                         </div>
-                                        <div class="edit_button" ng-click="editPeriod(dset)">
-                                            <span class="glyphicon glyphicon-wrench"></span>
+                                        <div class="edit_button" ng-click="savePeriod(dset)">
+                                            <span class="glyphicon glyphicon-floppy-save"></span>
                                         </div>
                                     </div>
                                 </md-list-item-text>
