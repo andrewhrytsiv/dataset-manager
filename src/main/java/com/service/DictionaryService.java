@@ -38,4 +38,8 @@ public class DictionaryService {
 		}
 		return true;
 	}
+	
+	public List<Dictionary> findAll(){
+		return dictionaryDAO.findAll();
+	}
 }

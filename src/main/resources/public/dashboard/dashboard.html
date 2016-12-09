@@ -1,7 +1,7 @@
 <div id="dashboard-container-id" class="dashboard-container" ng-cloak flow-init>
     <div>
         <md-content>
-            <md-tabs md-dynamic-height md-border-bottom>
+            <md-tabs ng-model="tabs" md-selected="selectedIndex" md-dynamic-height md-border-bottom >
                 <md-tab label="datasets">
                     <md-content class="md-padding">
                         <md-button class="md-primary md-raised" ng-click="showDatasetLoaderDialog($event)">
@@ -33,9 +33,9 @@
                         </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="datasets metadata">
+                <md-tab label="datasets metadata" md-on-select="loadMetadataForDatasets(false)">
                     <md-content class="md-padding">
-                        <button type="button" class="btn btn-success" ng-click="loadMetadataForDatasets()">Refresh</button>
+                        <button type="button" class="btn btn-success" ng-click="loadMetadataForDatasets(true)">Refresh</button>
                         <label style="margin-left: 50px">Search: <input ng-model="searchMetadataText"></label>
                         <div>
                             <md-list flex ng-model="metadataList">
@@ -44,6 +44,24 @@
                                         <p>ID : {{mdata.dataset.id}}</p>
                                         <pre ng-bind-html="mdata | prettify" ng-show="showDetails">
                                              {mdata | json}}
+                                        </pre>
+                                    </div>
+                                </md-list-item-text>
+                            </md-list>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="dictionary" md-on-select="loadDictionaryList(false)">
+                    <md-content class="md-padding">
+                        <button type="button" class="btn btn-success" ng-click="loadDictionaryList(true)">Refresh</button>
+                        <label style="margin-left: 50px">Search: <input ng-model="searchDictionaryText"></label>
+                        <div>
+                            <md-list flex ng-model="dictionaryList">
+                                <md-list-item-text class="md-3-line"  ng-repeat="dic in dictionaryList | filter:searchDictionaryText" ng-click="null">
+                                    <div class="md-list-item-text border-padding" layout="column" ng-dblclick="showDictionaryDetails = ! showDictionaryDetails">
+                                        <p>KEY : {{dic.key}}</p>
+                                        <pre ng-bind-html="dic | prettify" ng-show="showDictionaryDetails">
+                                             {dic | json}}
                                         </pre>
                                     </div>
                                 </md-list-item-text>

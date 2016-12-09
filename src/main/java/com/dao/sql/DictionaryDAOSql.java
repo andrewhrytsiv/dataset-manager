@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,26 @@ public class DictionaryDAOSql implements DictionaryDAO{
 		String sql = "SELECT * FROM dictionary WHERE key = ? AND  type = ?";
 		Dictionary dictionary = (Dictionary)jdbcTemplate.queryForObject(sql, new Object[] {key}, new DictionaryRowMapper());
 		return dictionary;
+	}
+	
+	@Override
+	public List<Dictionary> findAll() {
+		String sql = "SELECT * FROM dictionary";
+		List<Dictionary> dictionaryList = Lists.newArrayList();
+		List<Map<String, Object>> rows  = jdbcTemplate.queryForList(sql);
+		for (Map<String, Object> row : rows) {
+			try{
+				Dictionary dictionary = new Dictionary();
+				dictionary.setKey((String)row.get("key"));
+				dictionary.setType((String)row.get("type"));
+				PGobject postgreJson = (PGobject)row.get("dictionary_json");
+				dictionary.setDictionaryJson(postgreJson.getValue());
+				dictionaryList.add(dictionary);
+			}catch(Exception ex){
+				LOGGER.error("Retrive dictionary error:", ex);
+			}
+		}
+		return dictionaryList;
 	}
 	
 	@Override
