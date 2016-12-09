@@ -132,8 +132,7 @@
             {label: 'xlsx', value: 'xlsx'},
             {label: 'json(datasets)', value: 'json_datasets'},
             {label: 'json(dictionary)', value: 'json_dictionary'},
-            {label: 'csv', value: 'csv', isDisabled: true},
-            {label: 'html', value: 'html', isDisabled: true}
+            {label: 'json-stat', value: 'json-stat', isDisabled: true}
         ];
         $scope.fileType = 'xlsx';
 
