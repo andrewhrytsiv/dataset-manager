@@ -11,6 +11,8 @@ public interface DictionaryDAO {
 	
 	Dictionary find(String key, String typ);
 	
+	List<Dictionary> findAll();
+	
 	List<Dictionary> findDictionariesByKey(String key);
 
 	List<Dictionary> findDictionariesByType(String type);

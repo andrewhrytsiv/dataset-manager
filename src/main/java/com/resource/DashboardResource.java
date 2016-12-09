@@ -6,6 +6,7 @@ import static spark.Spark.*;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.bootstrap.Bootstrap.*;
 
+import com.entity.Dictionary;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.service.DashboardService;
 import com.service.DatasetService;
+import com.service.DictionaryService;
 import com.transformer.JsonTransformer;
 import com.util.HTTP;
 import com.util.MediaType;
@@ -38,6 +41,9 @@ public class DashboardResource extends Resource{
 	
 	@Autowired
 	private DatasetService datasetService;
+	
+	@Autowired
+	private DictionaryService dictionaryService;
 	
 	public DashboardResource() {
 		setupEndpoints();
@@ -114,5 +120,12 @@ public class DashboardResource extends Resource{
 			return EMPTY_RESPONSE;
 		});
 		
+		get(API_CONTEXT + "/protected/dashboard/dictionarylist", MediaType.APPLICATION_JSON, (request, response) -> {
+			List<Dictionary> dictionaryList = dictionaryService.findAll();
+			response.status(HTTP.OK);
+			List<String> jsonList = dictionaryList.stream().map( dictionary-> dictionary.getDictionaryJson()).collect(Collectors.toList());
+			String jsonArray = "[" + Joiner.on(",").join(jsonList) + "]";
+			return jsonList.isEmpty() ? EMPTY_RESPONSE : jsonArray;
+		});
 	}
 }

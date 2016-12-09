@@ -5,14 +5,16 @@
     app.controller('DashboardController', function ($scope, $http, $mdDialog, $location, AuthenticationService) {
         $scope.datasets = [];
         $scope.metadataList = [];
+        $scope.dictionaryList = [];
+
 
         $scope.$on('loadDatasetsEvent', function(){
             loadDatasets()
         });
         $scope.loadMetadataForDatasets = loadMetadataForDatasets;
+        $scope.loadDictionaryList = loadDictionaryList;
         $scope.savePeriod = savePeriod;
         loadDatasets();
-        loadMetadataForDatasets();
 
         $scope.showDatasetLoaderDialog = function (ev) {
             $mdDialog.show({
@@ -45,21 +47,42 @@
                 });
         };
 
-        function loadMetadataForDatasets(){
-            $scope.metadataList = [];
-            $http.get('/api/protected/dashboard/metadatafordatasets')
-                .success(function (response) {
-                    $scope.metadataList =  response;
-                })
-                .error(function (response, status) {
-                    $scope.metadataList = [];
-                    if(status == 401){
-                        AuthenticationService.logout();
-                        $location.path('/login');
-                    }else{
-                        console.log('Error status: ' + response.status);
-                    }
-                });
+        function loadMetadataForDatasets(needRefresh){
+            if(needRefresh || $scope.metadataList.length <= 0){
+                $scope.metadataList = [];
+                $http.get('/api/protected/dashboard/metadatafordatasets')
+                    .success(function (response) {
+                        $scope.metadataList =  response;
+                    })
+                    .error(function (response, status) {
+                        $scope.metadataList = [];
+                        if(status == 401){
+                            AuthenticationService.logout();
+                            $location.path('/login');
+                        }else{
+                            console.log('Error status: ' + response.status);
+                        }
+                    });
+            }
+        };
+
+        function loadDictionaryList(needRefresh){
+            if(needRefresh || $scope.dictionaryList.length <= 0){
+                $scope.dictionaryList = [];
+                $http.get('/api/protected/dashboard/dictionarylist')
+                    .success(function (response) {
+                        $scope.dictionaryList =  response;
+                    })
+                    .error(function (response, status) {
+                        $scope.dictionaryList = [];
+                        if(status == 401){
+                            AuthenticationService.logout();
+                            $location.path('/login');
+                        }else{
+                            console.log('Error status: ' + response.status);
+                        }
+                    });
+            }
         };
 
         function savePeriod(dataset){
