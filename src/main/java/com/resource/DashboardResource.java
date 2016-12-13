@@ -20,7 +20,6 @@ import static com.bootstrap.Bootstrap.*;
 import com.entity.Dictionary;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -30,7 +29,6 @@ import com.service.DictionaryService;
 import com.transformer.JsonTransformer;
 import com.util.HTTP;
 import com.util.MediaType;
-import com.util.Period;
 import com.util.Utility;
 
 public class DashboardResource extends Resource{

@@ -31,4 +31,6 @@ public interface DatasetDAO {
 
 	void updateDatasetInterval(String datasetId, int minutes);
 
+	List<MetadataKeyValue> findMetadataByKey(String key, String value);
+
 }

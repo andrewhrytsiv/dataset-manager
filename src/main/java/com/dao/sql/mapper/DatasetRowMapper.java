@@ -2,7 +2,6 @@ package com.dao.sql.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
 
 import org.springframework.jdbc.core.RowMapper;
 
