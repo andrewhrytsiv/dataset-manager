@@ -19,7 +19,7 @@ paths:
           format: uuid
       responses:
         200:
-          description: Successful response
+          description: Dataset json
           schema:
             title: Dataset JSON
             type: string
@@ -37,25 +37,52 @@ paths:
           format: uuid
       responses:
         200:
-          description: Successful response
+          description: Dataset json
           schema:
             title: Dataset JSON
             type: string
-  /api/dataset/create:
-   post:
+  /api/metadata/items:
+   get:
       description: |
-        Need discuss with Boldak.
+        Get metadata list by tag(path) and value.
       parameters:
         -
-          name: datasetID
+          name: tag
           in: query
-          description: It's unique id for dataset.
+          description: tag(path) in metadata json.
           required: true
           type: string
-          format: uuid
+        -
+          name: value
+          in: query
+          description: tag value in metadata json.
+          required: true
+          type: string
       responses:
         200:
-          description: Successful response
+          description: Array of metadata with contains tag(path) and value match(sql like "%value%")
+          schema:
+            title: Dataset JSON
+            type: string
+   post:
+      description: |
+        Get metadata list by tag(path) and value.
+      parameters:
+        -
+          name: tag
+          in: query
+          description: tag(path) in metadata json.
+          required: true
+          type: string
+        -
+          name: value
+          in: query
+          description: tag value in metadata json.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Array of metadata with contains tag(path) and value match(sql like "%value%")
           schema:
             title: Dataset JSON
             type: string
