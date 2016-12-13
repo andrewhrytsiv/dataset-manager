@@ -1,24 +1,16 @@
 package com.service;
 
-import java.io.FileReader;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import com.dao.DatasetDAO;
 import com.datasets.json.JSObject;
@@ -27,10 +19,6 @@ import com.entity.Dataset;
 import com.entity.MetadataKeyValue;
 import com.entity.render.SimpleDatasetJsonRender;
 import com.google.common.collect.Lists;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.util.AppConstants;
-import com.util.Pair;
 import com.util.Period;
 import com.util.Utility;
 import static com.util.AppConstants.*;
@@ -112,6 +100,21 @@ public class DatasetService {
 		}
 		return null;
 	}
+	
+	public List<String> findMetadataByKey(String key, String value){
+		List<String> list = Lists.newArrayList();
+		List<MetadataKeyValue> metadataList = datasetDAO.findMetadataByKey(key, value);
+		for(MetadataKeyValue metadata : metadataList){
+			try{
+				String jsonMetadata = new JSObject(metadata.getKeyValue()).toString();
+				list.add(jsonMetadata);
+			}catch(Exception ex){
+				LOGGER.error(ex.getMessage());
+			}
+		}
+		return list;
+	}
+	
 	public List<String> findAllMetadata() {
 		List<String> list = Lists.newArrayList();
 		List<MetadataKeyValue> metadataList = datasetDAO.findAllMetadata();

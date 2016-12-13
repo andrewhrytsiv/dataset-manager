@@ -172,5 +172,28 @@ public class DatasetDAOSql implements DatasetDAO{
 		String sql = "UPDATE datasets SET  next_update_interval_min = ? WHERE dataset_id = ?";
 		jdbcTemplate.update(sql, new Object[] {minutes, datasetId});
 	}
+
+	@Override
+	public List<MetadataKeyValue> findMetadataByKey(String keyParam, String valueParam) {
+		String sql = "SELECT * FROM  metadata_key_value WHERE dset_id IN (SELECT dset_id FROM metadata_key_value WHERE table_name = 'datasets' and key  = ? and value LIKE ?  ESCAPE '!')";
+		String likeValue = valueParam.replace("!", "!!").replace("%", "!%").replace("_", "!_").replace("[", "!["); 
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, keyParam, "%" + likeValue + "%");
+		Map<String, MetadataKeyValue> resultMap = Maps.newLinkedHashMap();
+		for (Map<String, Object> row : rows) {
+			String datasetId = (String) row.get("dset_id");
+			String key = (String) row.get("key");
+			String value = (String) row.get("value");
+			if(resultMap.containsKey(datasetId)){
+				MetadataKeyValue metadata = resultMap.get(datasetId);
+				metadata.getKeyValue().put(key, value);
+			}else{
+				MetadataKeyValue metadata = new MetadataKeyValue();
+				metadata.setUuid(datasetId);
+				metadata.getKeyValue().put(key, value);
+				resultMap.put(datasetId, metadata);
+			}
+		}
+		return Lists.newArrayList(resultMap.values());
+	}
 	
 }
