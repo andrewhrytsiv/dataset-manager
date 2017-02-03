@@ -3,5 +3,5 @@
 [![Client](https://img.shields.io/badge/client-angular%201.5-orange.svg)](https://angularjs.org/)
 
 # Dataset-Manager
-
+Dataset-manager is part of Doggy Jam platform for BI solutions http://dj-dps.herokuapp.com/
 Heroku link https://dataset-manager.herokuapp.com
